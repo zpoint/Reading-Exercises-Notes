@@ -1,0 +1,236 @@
+#include<stdio.h>
+int main(void)
+{
+	char chara[26];
+	int n;
+	for (n = 0;n < 26;n++)
+	{
+		chara[n] = 'a' + n;
+		printf("%c\n", chara[n]);
+	}
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	int i, j,a, b;
+	char lets;
+	for (i = 1;i < 6;i++)
+	{
+		for (j = 0;j < i; j++)
+			printf("$");
+		printf("\n");
+	}
+
+	for (a = 1;a < 6;a++)
+	{
+		for (b = 0,lets = 'F';b < a;b++, lets -= 1)
+			printf("%c",lets);
+		printf("\n");
+	}
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	int n, m, i, j;
+	char A, B, C;
+	printf("Please enter a character:\n");
+	scanf("%c", &A);
+	for (n = 0; n < 5;n++)
+	{
+		for (m = 0;m < 4 - n;m++)
+			printf(" ");
+		for (i = 0,B=A;i <= n;i++, B += 1)
+			printf("%c", B);
+		for (j = 0, C = B;j < n;j++, C -= 1)
+			printf("%c", C - 2);
+		printf("\n");
+	}
+	return 0;
+
+
+
+
+
+
+#include<stdio.h>
+int main(void)
+{
+	int upper, floor, n, m;
+	int i;
+	printf("Please enter the upper limit\n");
+	scanf("%d", &upper);
+	printf("And the floor\n");
+	scanf("%d", &floor);
+	printf("%10s%10s%10s\n","num","square","cube");
+	for (n = 1, i = floor;n <= upper;n++, i++)
+	{
+		printf("%10d%10d%10d\n", i, i*i, i*i*i);
+	}
+	return 0;
+}
+
+
+#include<stdio.h>
+#include<string.h>
+int main(void)
+{
+	char A[40];
+	int n, m;
+	printf("Please enter a word:\n");
+	scanf("%s", A);
+	for (n = strlen(A), m = n - 1;m >= 0;m--)
+		printf("%c", A[m]);
+	return 0;
+}
+
+7.
+#include<stdio.h>
+int main(void)
+{
+	float a, b;
+	printf("Please enter two float number:\n");
+	while (scanf("%f%f", &a,&b) == 2)
+		printf("%f\nPlease enter two float number\n", (a - b) / (a*b));
+	printf("End\n");
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	int upper, floor, sum, n;
+	printf("Enter lower and upper integer limits:\n");
+	scanf("%d%d", &floor, &upper);
+	while (floor < upper)
+	{
+		for (n = floor, sum = 0;n <= upper;n++)
+			sum += n*n;
+		printf("The sum of the squares from %d to %d is %d\n", floor, upper, sum);
+		printf("Enter lower and upper integer limits:\n");
+		scanf("%d%d", &floor, &upper);
+	}
+	printf("Done\n");
+	return 0;
+}
+
+10.
+#include<stdio.h>
+int main(void)
+{
+	char cha[20];
+	int n, m;
+	printf("Please enter eight int:\n");
+	for (n = 0; n < 8; n++)
+		scanf("%d", &cha[n]);
+	for (m = 7;m >= 0;m--)
+		printf("%d", cha[m]);
+	return 0;
+}
+
+11.
+#include<stdio.h>
+int main(void)
+{
+	int n, m, count;
+	double sum, sum_1;
+	printf("Please input a count(q to quit):\n");
+	while (scanf("%d", &count) == 1)
+	{
+		for (n = 1.0,sum=0;n <= count;n++)
+			sum += 1 / n;
+		for (n = 1.0,sum_1=0, m = -1;n <= count;n++, m *= (-1))
+			sum_1 += m*(1 / n);
+		printf("The sum of 1.0 + 1.0/2.0 + 1.0/3.0 +......1/n count to %d is %.1f\n", count, sum);
+		printf("The sum of 1.0-1.0/2.0+1.0/3.0-1.0/4.0......count to %d is %.1f\n", count, sum_1);
+		printf("Please input a count(q to quit):\n");
+	}
+	return 0;
+
+12£º
+#include<stdio.h>
+int main(void)
+{
+	int num[8], n, total;
+	for (n = 0, total = 2;n < 8;n++, total *= 2)
+		num[n] = total;
+	n = 0;
+	do printf("%d\t", num[n]);
+	while (++n < 8);
+		printf("End\n");
+	return 0;
+}
+
+#include<stdio.h>
+int main(void)
+{
+	double array[8], array_1[8], sum;
+	int n, m;
+	printf("Please enter 8 number of array1:\n");
+	for (n = 0;n < 8;n++)
+		scanf("%lf", &array[n]);
+	for (n = 1;n <= 8;n++)
+	{
+		for (m = 0, sum = 0;m < n;m++)
+		{
+			sum += array[m];
+			array_1[m] = sum;
+		}
+	}
+	printf("The number of array is:\n");
+	for (n = 0;n < 8;n++)
+		printf("%.4f\t", array[n]);
+	printf("\n");
+	for (n = 0;n < 8;n++)
+		printf("%.4f\t", array_1[n]);
+	return 0;
+}
+
+14.
+#include<stdio.h>
+int main(void)
+{
+	char cha[255];
+	int n, m;
+	printf("Please enter a sentence:\n");
+	for (n = 0;n < 20;n++)
+		scanf("%c", &cha);
+	for (n = 20-1;n >=0 ;n--)
+		printf("%c", cha[n]);
+	return 0;
+}
+
+
+15
+#include<stdio.h>
+int main(void)
+{
+	float Daphne, Deirdre;
+	int n, m;
+	for (n = 1, Deirdre = 100, Daphne = 100;Deirdre <= Daphne;n++)
+	{
+		Deirdre *= 1.05;
+		Daphne += (100 * 0.1);
+	}
+	printf("At the %d year,Deirdre more than Daphne,Deirdre is %.2f,Daphne is %.2f", n, Deirdre, Daphne);
+	return 0;
+}
+
+#include<stdio.h>
+int main(void)
+{
+	double Chuckie;
+	int n;
+	for (n = 1, Chuckie = 100.0;Chuckie >= 0;n++, Chuckie -= 10)
+	{
+		Chuckie *= 1.08;
+		printf("%d year %.2f left\n", n, Chuckie);
+	}
+	printf("In the %d year Chuckie gets empty left %.2f", n - 1, Chuckie);
+}

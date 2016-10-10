@@ -1,0 +1,312 @@
+2.
+#include <stdio.h>
+void copy_arr(double[],double[], int n);
+void copy_ptr(double *, double *, int n);
+int main(void)
+{
+	double source[5] = { 1.1,2.2,3.3,4.4,5.5 };
+	double target1[5] = {0};
+	double target2[5] = {0};
+	printf("Before operation:\n");
+	printf("source:\t%g\t%g\t%g\t%g\t%g\n", source[0], source[1], source[2], source[3], source[4], source[5]);
+	printf("target1:%g\t%g\t%g\t%g\t%g\n", target1[0], target1[1], target1[2], target1[3], target1[4], target1[5]);
+	printf("target2:%g\t%g\t%g\t%g\t%g\n", target2[0], target2[1], target2[2], target2[3], target2[4], target2[5]);
+	copy_arr(source, target1, 5);
+	copy_ptr(source, target2, 5);
+	printf("After operation:\n");
+	printf("source:\t%g\t%g\t%g\t%g\t%g\n", source[0], source[1], source[2], source[3], source[4], source[5]);
+	printf("target1:%g\t%g\t%g\t%g\t%g\n", target1[0], target1[1], target1[2], target1[3], target1[4], target1[5]);
+	printf("target2:%g\t%g\t%g\t%g\t%g\n", target2[0], target2[1], target2[2], target2[3], target2[4], target2[5]);
+	
+	return 0;
+}
+void copy_arr(double a1[], double a2[], int n)
+{
+	int i;
+	for (i = 0;i < n;i++)
+		a2[i] = a1[i];
+}
+void copy_ptr(double *a1, double *a2, int n)
+{
+	int i;
+	for (i = 0;i < n;i++)
+		*(a2 + i) = *(a1 + i);
+}
+3.
+#include<stdio.h>
+int max(int ar[], int n);
+int main(void)
+{
+	int ar[4] = { 1,2,88,5 };
+	printf("The biggest number of {%d,%d,%d,%d} is %d\n", ar[0], ar[1], ar[2], ar[3], max(ar, 4));
+	return 0;
+}
+int max(int ar[], int n)
+{
+	int i, j;
+	for (i = 0, j = ar[i];i < n;i++)
+		if (ar[i] > j)
+		j = ar[i];
+	return j;
+}
+4.
+#include<stdio.h>
+int max(double *ar, int n);
+int main(void)
+{
+	double ar[5] = { 2.5,3.1415926,7565.35,53.65,2.3 };
+	printf("The biggest number of {%.2f,%.2f,%.2f,%.2f} is %d\n", ar[0], ar[1], ar[2], ar[3], max(ar, 5));
+	return 0;
+}
+int max(double *ar, int n)
+{
+	int i,j;
+	for (i = 0, j = 0;i < n; i++)
+		if (*(ar + i)>*(ar + j))
+		j = i;
+	return j+1;
+}
+5.
+#include<stdio.h>
+double cha(double *ar, int n);
+int main(void)
+{
+	double ar[5] = { 2.5,3.1415926,7565.35,53.65,2.3 };
+	printf("The ²î  of the biggest one and smallest one for {%.2f,%.2f,%.2f,%.2f} is %.4f\n", ar[0], ar[1], ar[2], ar[3], cha(ar, 5));
+	return 0;
+}
+double cha(double *ar, int n)
+{
+	int i,max,min;
+	for (i = max = min = 0;i < n; i++)
+	{
+		if (*(ar + i)>*(ar + max))
+			max = i;
+		else if (*(ar + i)<*(ar + min))
+			min = i;
+	}
+	return *(ar + max) - *(ar + min);
+}
+6.
+#include<stdio.h>
+void copy_arr(double(*ar)[2], double(*target)[2], int n);
+void copy_ptr(double ar[][2], double target[][2], int n);
+int main(void)
+{
+	double ar[2][2] = { { 1.2,2.6 },{ 3.8,3.1415 } };
+	double target1[2][2] = { 0 };
+	double target2[2][2] = { 0 };
+	copy_arr(ar, target1, 2);
+	copy_ptr(ar, target2, 2);
+	return 0;
+}
+void copy_arr(double(*ar)[2], double(*target)[2], int n)
+{
+	int i, j;
+	for (i = 0;i < n;i++)
+		for (j = 0;j < 2;j++)
+		{
+			*(*(target + i) + j) = *(*(ar + i) + j);
+			printf("%g\t", *(*(target + i) + j));
+		}
+	printf("\n");
+}
+void copy_ptr(double ar[][2], double target[][2], int n)
+{
+	int i, j;
+	for (i = 0;i < n;i++)
+		for (j = 0;j < 2;j++)
+		{
+			target[i][j] = ar[i][j];
+			printf("%g\t", target[i][j]);
+		}
+}
+7.
+#include<stdio.h>
+void copy_3to5(int *arr, int *target);
+int main(void)
+{
+	int arr[7] = { 2,5,6,8,9,7,4 };
+	int target[3] = { 0 };
+	copy_3to5(arr, target);
+	return 0;
+}
+void copy_3to5(int *arr, int *target)
+{
+	int i;
+	for (i = 0;i < 3;i++)
+	{
+		*(target + i) = *(arr + 2 + i);
+		printf("%d\t", *(arr + 2 + i));
+	}
+}
+8.
+#include<stdio.h>
+#define COLS 5
+void copy_arr(double (*arr)[COLS], double (*target)[COLS]);
+void display(double (*arr)[COLS]);
+int main(void)
+{
+	double arr[3][5] = { {2.05,8.6,9.5,1.6,6.35},{5.24,3.69,10.66,56.36,65.321},{1.88,4.52,6.32,5.2147,4102.23} };
+	double target[3][5] = { 0 };
+	copy_arr(arr, target);
+	display(arr);
+	display(target);
+	return 0;
+}
+void copy_arr(double(*arr)[COLS], double(*target)[COLS])
+{
+	int i, j;
+	for (i = 0;i < 3;i++)
+		for (j = 0;j < COLS;j++)
+		*(*(target + i) + j) = *(*(arr + i) + j);
+}
+void display(double(*arr)[COLS])
+{
+	int i, j;
+	for (i = 0;i < 3;i++)
+	{
+		for (j = 0; j < COLS;j++)
+			printf("%g\t", *(*(arr + i) + j));
+		putchar('\n');
+	}
+	putchar('\n');
+}
+
+9.
+#include<stdio.h>
+void add_arr(int *arr1, int *arr2, int *arr3,int n);
+void display(int *arr,int n);
+int main(void)
+{
+	int arr1[4] = { 2,4,5,8 }, arr2[4] = { 1,0,4,6 }, arr3[4] = {0};
+	add_arr(arr1, arr2, arr3, 4);
+	display(arr1,4);
+	display(arr2,4);
+	display(arr3,4);
+	return 0;
+}
+void add_arr(int *arr1, int *arr2, int *arr3, int n)
+{
+	int i;
+	for (i = 0;i < n;i++)
+		*(arr3 + i) = *(arr1 + i) + *(arr2 + i);
+}
+void display(int *arr,int n)
+{
+	int i;
+	for (i = 0;i < n;i++)
+		printf("%d\t", *(arr + i));
+	printf("\n");
+}
+10.
+#include<stdio.h>
+#define COLS 5
+void double_num(double (*arr)[COLS]);
+void display(double (*arr)[COLS]);
+int main(void)
+{
+	double arr[3][COLS] = { { 2.05,8.6,9.5,1.6,6.35 },{ 5.24,3.69,10.66,56.36,65.321 },{ 1.88,4.52,6.32,5.2147,4102.23 } };
+	display(arr);
+	double_num(arr);
+	printf("Now,double times:\n");
+	display(arr);
+	return 0;
+}
+void double_num(double(*arr)[COLS])
+{
+	int n,m;
+	for (n = 0;n < 3;n++)
+		for (m = 0;m < COLS;m++)
+		*(*(arr + n) + m) *= 2;
+}
+void display(double(*arr)[COLS])
+{
+	int n, m;
+	for (n = 0;n < 3;n++)
+	{
+		for (m = 0;m < COLS;m++)
+			printf("%g\t", *(*(arr + n) + m));
+		putchar('\n');
+	}
+}
+11.
+data long,tired of copying
+12.
+#include<stdio.h>
+#define COLS 5
+void scan(double arr[][COLS]);
+void average_5(double arr[][COLS]);
+void average(double arr[][COLS]);
+void show(double arr[][COLS]);
+double biggest(double arr[][COLS]);
+int main(void)
+{
+	double arr[3][COLS] = { 0 };
+	scan(arr);
+	show(arr);
+	average_5(arr);
+	average(arr);
+	printf("The biggest number of:\n");
+	printf("is:%g", biggest(arr));
+}
+void scan(double arr[][COLS])
+{
+	printf("Please enter a 3X%d numbers of double:\nNow first fives:\n", COLS);
+	int i, j;
+	for (i = 0;i < 3;i++)
+	{
+		for (j = 0;j < COLS;j++)
+			scanf("%lf", &arr[i][j]);
+		if (i<2)
+			printf("Now,Next five double:\n");
+	}
+	printf("Appreciate very much.\n");
+}
+void average_5(double arr[][COLS])
+{
+	int i, j;
+	double sum;
+	printf("The average of three lines of five number is:\n");
+	for (i = 0;i < 3;i++)
+	{
+		for (j = 0, sum = 0;j < COLS;j++)
+			sum += arr[i][j];
+		printf("%g\t", sum / 5);
+	}
+	printf("\n");
+}
+void average(double arr[][COLS])
+{
+	int i, j;
+	double sum;
+	printf("The average of all number is:\n");
+	for (i = 0;i < 3;i++)
+		for (j = 0, sum = 0;j < COLS;j++)
+		sum += arr[i][j];
+	printf("%g\t", sum / 15);
+	printf("\n");
+}
+void show(double arr[][COLS])
+{
+	int i, j;
+	for (i = 0;i < 3;i++)
+	{
+		for (j = 0;j < COLS;j++)
+			printf("%g\t", arr[i][j]);
+		printf("\n");
+	}
+}
+double biggest(double arr[][COLS])
+{
+	int i, j;
+	double max;
+	for (i = 0;i < 3;i++)
+	{
+		for (j = 0, max = arr[i][j];j < COLS;j++)
+			if (max < arr[i][j])
+			max = arr[i][j];
+	}
+	return max;
+}
+13.same as 12

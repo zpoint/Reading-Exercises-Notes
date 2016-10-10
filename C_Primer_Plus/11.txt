@@ -1,0 +1,387 @@
+1.
+#include<stdio.h>
+char * get(char *str, int n);
+int main(void)
+{
+	char str[20];
+	puts("input a string less than 20 characters ctrl + z to quit : ");
+	puts(get(str, 19));
+	return 0;
+}
+char * get(char *str, int n)
+{
+	char ch;
+	int i=0;
+	while ((ch = getchar()) != EOF && i<n)
+	{
+		str[i] = ch;
+		i++;
+	}
+	str[i] = '\0';
+	return str;
+}
+2.
+#include<stdio.h>
+char * get(char *str, int n);
+int main(void)
+{
+	char str[20];
+	puts("input a string less than 20 characters ctrl + z to quit : ");
+	puts(get(str, 19));
+	return 0;
+}
+char * get(char *str, int n)
+{
+	char ch;
+	int i=0;
+	while ((ch = getchar()) != EOF && i<n)
+	{
+		str[i] = ch;
+		i++;
+	}
+	str[i] = '\0';
+	return str;
+}
+3.
+#include<stdio.h>
+char *getword(char*str);
+int main(void)
+{
+	char str[50];
+	puts("Please enter a word:");
+	puts(getword(str));
+	return 0;
+}
+char *getword(char*str)
+{
+	char ch;
+	int i = 0;
+	while ((ch = getchar()) != EOF && ch != '\n' && ch != ' ' && ch != '\t')
+	{
+		str[i] = ch;
+		i++;
+	}
+	str[i] = '\0';
+	while (getchar() != '\n')
+		continue;
+	return str;
+}
+4.
+#include<stdio.h>
+char *search(char *str1, char ch);
+int main(void)
+{
+	printf("%p\n", search("Good morning!", 'r'));
+	printf("%p\n", search("Good morning!", 'n'));
+	printf("%p", search("Good morning!",'i'));
+	return 0;
+}
+char *search(char *str, char ch)
+{
+	int i=0;
+	while (str[i] != NULL)
+	{
+		if (str[i] == ch)
+			break;
+		i++;
+	}
+	return str + i;
+}
+5.
+#include<stdio.h>
+int is_within(char n,char *str);
+int main(void)
+{
+	printf("%d", is_within('i', "Good morning"));
+	return 0;
+}
+int is_within(char n, char *str)
+{
+	int i=0;
+	while (str[i] != NULL)
+	{
+		if (n == str[i])
+			return 1;
+		i++;
+	}
+	return 0;
+}
+6.
+#include<stdio.h>
+char *strcp(char *s1, char *s2, int n);
+int main(void)
+{
+	char s1[100] = "Good morning";
+	char *s2 = "123456";
+	puts(strcp(s1, s2, 6));
+	return 0;
+}
+char *strcp(char *s1, char *s2, int n)
+{
+	int i=0,j=0;
+	while (s1[i] != NULL)
+		i++;
+	do
+	{
+		*(s1 + i) = *(s2 + j);
+		j++;
+		i++;
+	} while (j < n && (s1 + i) != NULL);
+	if (*(s1 + n) != NULL && *(s1+i)!= NULL)
+		*(s1 + n) = NULL;
+	return s1;
+	
+	
+}
+7.
+#include<stdio.h>
+#include<string.h>
+char *string_in(char *str1, char *str2);
+int main(void)
+{
+	printf("%s", string_in("hats", "at"));
+	return 0;
+}
+char *string_in(char *str1, char *str2)
+{
+	int i = 0, j, k;
+	while (*(str2+i)!= NULL)
+		i++;
+	for (j = 0;j < strlen(str1);j++)
+	{
+		k = 0;
+		while (*(str1+j+k) == *(str2+k) && k < i)
+			k++;
+		if (k == i)
+			return (str1 + j);
+	}
+	return NULL;
+}
+8.
+#include<stdio.h>
+#include<string.h>
+char *turn(char *str1);
+int main(void)
+{
+	char str[80];
+	fgets(str, 80, stdin);
+	puts(turn(str));
+	return 0;
+}
+char *turn(char *str1)
+{
+	int i, j;
+	char temp;
+	for (i = strlen(str1) - 2, j = 0;i >= (strlen(str1) - 1)/2;i--, j++)
+	{
+		temp = *(str1 + i);
+		*(str1 + i) = *(str1 + j);
+		*(str1 + j) = temp;
+	}
+	return str1;
+}
+9.
+#include<stdio.h>
+char *dele(char*str);
+int main(void)
+{
+	char st[80];
+	while(gets_s(st, 80))
+		puts(dele(st));
+	return 0;
+}
+char *dele(char*str)
+{
+	char ch;
+	int i=0,n;
+	while (*(str + i))
+	{
+		if (*(str + i) == ' ')
+			for (n = 0;*(str + i + n);n++)
+			*(str + i + n) = *(str + i + n + 1);
+		i++;
+	}
+	return str;
+}
+10.
+#include<stdio.h>
+#include<string.h>
+void menu(char * str[10]);
+int len_fd(char *str);
+int main(void)
+{
+	char str[10][11];
+	int i = 0;
+	while (i < 10)
+	{
+		printf("Now enter %d string\n", i + 1);
+		gets_s(*(str + i), 10);
+		i++;
+	}
+	char *st[10] = { str[0],str[1],str[2],str[3],str[4],str[5],str[6],str[7],str[8],str[9] };
+	menu(st);
+	return 0;
+}
+void menu(char  * str[10])
+{
+	char choice, *temp;
+	int i = 0, j;
+	puts("a.输入初始字符串列表\tb.按ASCII顺序输出字符串");
+	puts("c.按长度递增顺序输出字符串\td.按字符串中第一个单词的长度输出字符串");
+	puts("q to quit");
+	while (scanf("%c", &choice) == 1 && choice != 'q')
+	{
+		while (getchar() != '\n')
+			continue;
+		switch (choice)
+		{
+		case 'a':for (i = 0;i < 10;i++)
+			puts(*(str + i));
+			break;
+		case 'b':for (i = 0;i < 10;i++)
+			for (j = i + 1;j < 10;j++)
+			if (strcmp(*(str + i), *(str + j))>0)
+			{
+				temp = *(str + i);
+				*(str + i) = *(str + j);
+				*(str + j) = temp;
+			}
+				 for (i = 0;i < 10;i++)
+					 puts(*(str + i));
+				 break;
+		case 'c':for (i = 0;i < 10;i++)
+			for (j = i + 1;j < 10;j++)
+			if (strlen(*(str + i))>strlen(*(str + j)))
+			{
+				temp = *(str + i);
+				*(str + i) = *(str + j);
+				*(str + j) = temp;
+			}
+				 for (i = 0;i < 10;i++)
+					 puts(*(str + i));
+				 break;
+		case 'd':for (i = 0;i < 10;i++)
+			for (j = i + 1;j < 10;j++)
+			if (len_fd(*(str + i))>len_fd(*(str + j)))
+			{
+				temp = *(str + i);
+				*(str + i) = *(str + j);
+				*(str + j) = temp;
+			}
+				 for (i = 0;i < 10;i++)
+					 puts(*(str + i));
+				 break;
+		default:puts("Sorry,invalid input，Please try again");
+			break;
+		}
+		printf("choose again\n");
+		puts("a.输入初始字符串列表\tb.按ASCII顺序输出字符串");
+		puts("c.按长度递增顺序输出字符串\td.按字符串中第一个单词的长度输出字符串");
+		puts("q to quit");
+	}
+	puts("Quit");
+}
+int len_fd(char *str)
+{
+	char ch, *word;
+	int i = 0;
+	while ((ch = *(str + i)) != ' '&& ch != '\t' && ch != '\n' && ch != EOF)
+	{
+		word[i] = str[i];
+		i++;
+	}
+	word[i] = '\0';
+	return strlen(word);
+}
+11.
+#include<stdio.h>
+#include<ctype.h>
+#include<stdbool.h>
+int main(void)
+{
+	bool inword = false;
+	char ch;
+	int words = 0, upper = 0, lower = 0, punct = 0, digit = 0;
+	while ((ch = getchar()) != EOF)
+	{
+		if (isalpha(ch))
+		{
+			if (inword == false)
+			{
+				inword = true;
+				words++;
+			}
+		}
+		else
+			inword = false;
+		if (isupper(ch))
+			upper++;
+		if (islower(ch))
+			lower++;
+		if (ispunct(ch))
+			punct++;
+		if (isdigit(ch))
+			digit++;
+	}
+	printf("words:%d\tupper:%d\tlower:%d\t\n",words,upper,lower);
+	printf("punct:%d\tdigit:%d\n", punct, digit);
+	return 0;
+
+}
+12.
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+int main(void)
+{
+	char words[100],temp;
+	int i , j,k,h;
+	while (gets_s(words))
+	{
+		for (i = 0,j= strlen(words)-1;i < strlen(words) / 2;i++,j--)
+		{
+			temp = words[i];
+			words[i] = words[j];
+			words[j] = temp;
+		}
+		for (i = 0,j=0;i < strlen(words);i++)
+		{
+			if (isalpha(words[i]))
+				j++;
+			else
+			{
+				for (k = i-1,h=0;h < j / 2; h++,k++, j--)
+				{
+					temp = words[k - j];
+					words[k] = words[j];
+					words[j] = temp;
+				}
+				j = 0;
+			}
+		}
+		puts(words);
+	}
+	return 0;
+}
+13.
+14.
+15.
+#include<stdio.h>
+#include<ctype.h>
+int main(int argc, char *argv[])
+{
+	char ch;
+	if (argv[1][0] == '-')
+	{
+		if (argv[1][1] == 'p')
+			while ((ch = getchar()) != EOF)
+			putchar(ch);
+		if (argv[1][1] == 'u')
+			while ((ch = getchar()) != EOF)
+			putchar(toupper(ch));
+		if (argv[1][1] == 'l')
+			while ((ch = getchar()) != EOF)
+			putchar(tolower(ch));
+	}
+	return 0;
+}

@@ -1,0 +1,369 @@
+#include<stdio.h>
+#include<ctype.h>
+#include<stdbool.h>
+#define STOP '|'
+int main(void)
+{
+	char c;
+	char prev;
+	long n_chars = 0L;
+	int n_lines = 0, n_words = 0, p_lines = 0;
+	bool inword = false;
+	printf("Enter text to be analyzed(| to terminate):\n");
+	prev = '\n';
+	while ((c = getchar()) != STOP)
+	{
+		n_chars++;
+		if (c == '\n')
+			n_lines++;
+		if (!isspace(c) && !inword)
+		{
+			inword = true;
+			n_words++;
+		}
+		if (isspace(c) && inword)
+			inword = false;
+		prev = c;
+
+	}
+	if (prev != '\n')
+		p_lines = 1;
+	printf("Characters =%ld,words = %d,lines = %d", n_chars, n_words, n_lines);
+	printf("partial lines = %d\n", p_lines);
+	return 0;
+}
+
+
+
+1.
+#include<stdio.h>
+int main(void)
+{
+	int i_space=0, i_nl=0, i_cha=0;
+	char ch;
+	printf("Please input yourwords:('#' to quit)\n"); /* read input */
+	while ((ch=getchar())!='#')
+	{
+		if (ch == ' ')
+			i_space++;
+		else if (ch == '\n')
+			i_nl++;
+		else
+			i_cha++;
+	}
+	printf("spaces: nwelines: ohters\n");
+	printf("%d\t%d\t  %d\t\n", i_space, i_nl, i_cha);
+	return 0;
+
+2.
+#include<stdio.h>
+int main(void)
+{
+	char ch;
+	int n=0, m;
+	printf("Please input:\n");
+	while ((ch = getchar()) != '#')
+	{
+		n++;
+		printf("%c--%d\t",ch,ch);
+		if (n % 8 == 0)
+			printf("\n");
+	}
+	return 0;
+}
+3.
+
+#include<stdio.h>
+int main(void)
+{
+	char ch;
+	int n, o=0,sum_o = 0, j = 0,sum_j=0;
+	printf("Please input inters:(0 to quit)\n");
+	while (scanf("%d", &n) == 1 && n != 0)
+	{
+		if (n % 2 == 0)
+		{
+			o++;
+			sum_o += n;
+		}
+		else
+		{
+			j++;
+			sum_j += n;
+		}
+		printf("Please input inters:(0 to quit)\n");
+		}
+	printf("There are %d odds in total,The sum of odds is %d,and the average is %d\n",o,sum_o,sum_o/o);
+	printf("There are %d j in total,The sum of j is %d,and the average is %d\n", j, sum_j, sum_j / j);
+	printf("Programm end\n");
+	return 0;
+}
+
+4.
+#include<stdio.h>
+int main(void)
+{
+	int n=0, m=0;
+	char ch;
+	printf("Please input sth:\n");
+	while ((ch = getchar()) != '#')
+	{
+		if (ch == '.')
+		{
+			putchar('!');
+			n++;
+		}
+		else if (ch == '!')
+		{
+			putchar('!');
+			putchar('!');
+			m++;
+		}
+		else
+			putchar(ch);
+	}
+	printf("%d times of '.' replaced by '!'\n", n);
+	printf("%d times f '!'replaced by '!!'\n", m);
+		return 0;
+}
+5.
+6.
+#include<stdio.h>
+int main(void)
+{
+	char ch;
+	int e=0, i=0;
+	printf("Please input your words:(# to quit)\n");
+	while ((ch = getchar()) != '#')
+	{
+		if (ch == 'e')
+			e++;
+		else if (ch == 'i')
+			i++;
+	}
+	printf("The total 'e' is %d,'i'in total is %d", e, i);
+	return 0;
+
+}
+7.
+#include<stdio.h>
+#define BASIC 10.00
+#define OT 1.5
+#define RATE1 0.15
+#define RATE2 0.2
+#define RATE3 0.25
+#define RATE11 45
+#define LIMIT1 300
+#define LIMIT2 150
+#define RATE21 30
+#define TIME 40
+int main(void)
+{
+	double hours, rate, get, gross;
+	printf("Please input your work hours per week:\n");
+	scanf("%lf", &hours);
+	if (hours > TIME)
+		hours = TIME + (hours - TIME)*OT;
+	gross = hours*BASIC;
+	if (gross <= LIMIT1)
+		rate = RATE1*gross;
+	else if (gross <= (LIMIT1 + LIMIT2))
+		rate = RATE11 + (gross - LIMIT1)*RATE2;
+	else
+		rate = RATE11 + RATE21 + (gross - LIMIT1 - LIMIT2)*RATE3;
+    get = gross - rate;
+	printf("Your salary in total is %.2f,your rate is %.2f,your net income is %.2f\n", gross, rate, get);
+	return 0;
+}
+8.
+
+#include<stdio.h>
+#define OT 1.5
+#define RATE1 0.15
+#define RATE2 0.2
+#define RATE3 0.25
+#define RATE11 45
+#define LIMIT1 300
+#define LIMIT2 150
+#define RATE21 30
+#define TIME 40
+int main(void)
+{
+	int choice;
+	double hours = 0, rate, get, gross, BASIC;
+	printf("****************************************************************\n");
+	printf("Enter the number corrsponding to the desired pay rate or action:\n");
+	printf("1)$8.75/hr\t\t");
+	printf("2)$9.33/hr\t\t\n");
+	printf("3)$10.00/hr\t\t");
+	printf("4)$11.20/hr\t\t\n");
+	printf("5)quit\n");
+	printf("****************************************************************\n");
+	while (scanf("%d", &choice) == 1)
+	{
+		if (choice > 0 && choice < 6)
+		{
+			switch (choice)
+			{
+			case 1:BASIC = 8.75;
+				break;
+			case 2:BASIC = 9.33;
+				break;
+			case 3:BASIC = 10.00;
+				break;
+			case 4:BASIC = 11.20;
+				break;
+			case 5:printf("quit");
+				return 0;
+			}
+			break;
+		}
+		else
+			printf("Please enter 1-5\n");
+	}
+	printf("Please input your work hours per week:\n");
+	scanf("%lf", &hours);
+	if (hours > TIME)
+		hours = TIME + (hours - TIME)*OT;
+	gross = hours*BASIC;
+	if (gross <= LIMIT1)
+		rate = RATE1*gross;
+	else if (gross <= (LIMIT1 + LIMIT2))
+		rate = RATE11 + (gross - LIMIT1)*RATE2;
+	else
+		rate = RATE11 + RATE21 + (gross - LIMIT1 - LIMIT2)*RATE3;
+	get = gross - rate;
+	printf("Your salary in total is %.2f,your rate is %.2f,your net income is %.2f\n", gross, rate, get);
+	return 0;
+}
+9.#include<stdio.h>
+#include<stdbool.h>
+int main(void)
+{
+	long num;
+	long limit;
+	long div;
+	bool isPrime;
+	printf("Please enter an inter to analysis: ");
+	printf("Enter q to quit.\n");
+	while (scanf("%ld", &limit) == 1 && limit>0)
+	{
+		for (num = 2;num < limit;num++)
+		{
+			for (div = 2, isPrime = true;div*div < num;div++)
+			{
+				if (num%div == 0)
+					isPrime = false;
+			}
+			if (isPrime == true)
+				printf("%ld  ", num);
+		}
+		printf("\nPlease enter an inter to analysis: ");
+		printf("Enter q to quit.\n");
+	}
+	return 0;
+}
+
+10.
+#include<stdio.h>
+#define RATE1 0.15
+#define RATE2 28
+int main(void)
+{
+	int n;
+	double rate, first, income;
+	printf("********************************************************************\n");
+	printf("Please enter your choice:\n");
+	printf("1)µ•…Ì\t\t2)ªß÷˜\n3£©“—ªÈ£¨π≤”–\t4£©“—ªÈ£¨¿Î“Ï\n5)quit\n");
+	printf("********************************************************************\n");
+	while (scanf("%d", &n) == 1)
+	{
+		switch (n)
+		{
+		case 1:first = 17850;
+			break;
+		case 2:first = 23900;
+			break;
+		case 3:first = 29750;
+			break;
+		case 4:first = 14875;
+			break;
+		default:printf("qiut\n");
+			return 0;
+		}
+		printf("Please enter your income:\n");
+		scanf("%lf", &income);
+		if (income <= first)
+			rate = income*RATE1;
+		else
+			rate = first*RATE1 + (income - first)*RATE2;
+		printf("Your rate is %.2lf in total\n",rate);
+		printf("********************************************************************\n");
+		printf("Please enter your choice:\n");
+		printf("1)µ•…Ì\t\t2)ªß÷˜\t\t\n3£©“—ªÈ£¨π≤”–\t\t4£©“—ªÈ£¨¿Î“Ï\n5)quit\n");
+		printf("********************************************************************\n");
+	}
+	return 0;
+}
+
+11.
+#include<stdio.h>
+#define CXL 1.25
+#define TC 0.65
+#define RABBIT 0.89
+int main(void)
+{
+	int youhui = 0;
+	char ch;
+	double pound, sum, total = 0, cxl, tc, rabbit, ship;
+	printf("Please input your need:\n");
+	printf("a)≥Øœ ºª\tb)Ã≤À\tc)∫˙¬‹≤∑\t\nq)qiut\n");
+	while ((ch=getchar())!= 'q')
+	{
+		if (ch == '\n')
+			continue;
+		while (getchar() != '\n')
+			continue;
+		printf("How many pounds do you need:\n");
+		scanf("%lf", &pound);
+		switch (ch)
+		{
+		case 'a':sum = CXL*pound;
+			cxl = pound;
+			break;
+		case 'b':sum = TC*pound;
+			tc = pound;
+			break;
+		case 'c':sum = RABBIT*pound;
+			rabbit = pound;
+			break;
+		}
+		
+		total += sum;
+		printf("Please input your need:\n");
+		printf("a)≥Øœ ºª\tb)Ã≤À\tc)∫˙¬‹≤∑\t\nq)qiut\n");
+	}
+	if (total > 100)
+	{
+		total = total*0.95;
+		youhui = 1;
+	}
+	if (pound <= 5)
+		ship = 3.5;
+	else if (pound < 20)
+		ship = 10;
+	else
+		ship = 8 + 0.1*pound;
+
+	printf("≥Øœ ºª 1.25/pound\tÃ≤À0.65/pound\t∫˙¬‹≤∑0.89/pound\n");
+	printf("You order %.2lf ≥Øœ ºª£¨%.2lf Ã≤À and %.2lf ∫˙¬‹≤∑\n", cxl, tc, rabbit);
+	printf("≥Øœ ºª cost %.2lf, Ã≤À cost %.2lf and ∫˙¬‹≤∑ cost %.2lf\n", cxl*CXL, tc*TC, rabbit*RABBIT);
+	if (youhui = 1)
+		printf("You can enjoy a 0.95 in cost\n");
+	else
+		printf("sorry ,no youhui\n");
+	printf("They cost %.2lf in total\n", total);
+	printf("The ship cost %.2f\n", ship);
+	printf("The cost in total is %.2f\n", total + ship);
+	return 0;
+}

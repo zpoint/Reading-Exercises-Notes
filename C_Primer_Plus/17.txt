@@ -1,0 +1,1079 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define TSIZE 45
+struct film {
+	char title[TSIZE];
+	int rating;
+	struct film * next;
+};
+void showlist(struct film *current);
+int main(void)
+{
+	struct film * head = NULL;
+	struct film *prev, *current;
+	char input[TSIZE];
+	/* 收集储存信息 */
+	puts("Enter first movie title: ");
+	while (gets_s(input) != NULL && input[0] != '\0')
+	{
+		current = (struct film *)malloc(sizeof(struct film));
+		if (head == NULL)
+			head = current;
+		else
+			prev->next = current;
+		current->next = NULL;
+		strcpy(current->title, input);
+		puts("Enter your rating <0-10>: ");
+		scanf("%d", &current->rating);
+		while (getchar() != '\n')
+			continue;
+		puts("Enter next movie title (empty line to stop): ");
+		prev = current;
+	}
+	// 给出电影列表 //
+	if (head == NULL)
+		printf("No data entered. ");
+	else
+		printf("Here is the movie list: \n");
+	current = head;
+	puts("倒序给出列表:");
+	showlist(current);
+	puts("顺序给出列表:");
+	current = head;
+	while (current != NULL)
+	{
+		printf("Movie: %s Rating: %d\n", current->title, current->rating);
+		current = current->next;
+	}
+	return 0;
+}
+void showlist(struct film *current)
+{
+	if (current != NULL)
+	{
+		showlist(current->next);
+		printf("Movie: %s Rating: %d\n", current->title, current->rating);
+	}
+}
+
+2.
+list.h
+#include<stdbool.h>
+#define TSIZE 45
+struct film
+{
+	char title[TSIZE];
+	int rating;
+};
+typedef struct film Item;
+typedef struct node
+{
+	Item item;
+	struct node * next;
+}Node;
+typedef struct list
+{
+	Node * head;
+	Node * end;
+}List;
+void InitializeList(List *plist);
+bool ListIsEmpty(const List * plist);
+bool ListIsFull(const List * plist);
+unsigned int ListItemCount(const List * plist);
+bool AddItem(Item item, List * plist);
+void Traverse(const List * plist, void(*pfun)(Item item));
+void EmptyTheList(List * plist);
+
+
+list.c
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include "list.h"
+static void CopyToNode(Item item, Node * pnode);
+void InitializeList(List * plist)
+{
+	plist->head = NULL;
+	plist->end = NULL;
+}
+bool ListIsEmpty(const List * plist)
+{
+	if (plist == NULL)
+		return true;
+	else
+		return false;
+}
+bool ListIsFull(const List * plist)
+{
+	if (ListItemCount(plist) <= 9)
+		return false;
+	else
+		return true;
+}
+unsigned int ListItemCount(const List * plist)
+{
+	unsigned int count = 0;
+	Node * pnode = plist->head;
+	while (pnode != NULL)
+	{
+		++count;
+		pnode = pnode->next;
+	}
+	return count;
+}
+bool AddItem(Item item, List * plist)
+{
+	Node * pnew;
+	Node * scan = plist->head;
+	pnew = (Node *)malloc(sizeof(Node));
+	if (pnew == NULL)
+		return false;
+	CopyToNode(item, pnew);
+	pnew->next = NULL;
+	if (scan == NULL)
+		plist->head = pnew;
+	else
+	{
+		while (scan->next != NULL)
+			scan = scan->next;
+		scan->next = pnew;
+	}
+	return true;
+}
+void Traverse(const List * plist, void(*pfun)(Item item))
+{
+	Node * pnode = plist->head;
+	while (pnode != NULL)
+	{
+		(*pfun)(pnode->item);
+		pnode = pnode->next;
+	}
+}
+void EmptyTheList(List * plist)
+{
+	Node * psave, *hat;
+	int count = 0;
+	hat = plist->head;
+	while (hat != NULL)
+	{
+		psave = hat->next;
+		free(hat);
+		hat = psave;
+	}
+}
+static void CopyToNode(Item item, Node * pnode)
+{
+	pnode->item = item;
+}
+
+film3.c
+#include<stdio.h>
+#include<stdlib.h>
+#include "list.h"
+void showmovies(Item item);
+int main(void)
+{
+	List movies;
+	Item temp;
+	// Initialize //
+	InitializeList(&movies);
+	if (ListIsFull(&movies))
+	{
+		fprintf(stderr, "No memory avaliable! Bye!\n");
+		exit(1);
+	}
+	// 收集并存储 //
+	puts("Enter first movie title: ");
+	while (gets_s(temp.title) != NULL && temp.title[0] != '\0')
+	{
+		puts("Enter your rating <0-10>: ");
+		while (scanf("%d", &temp.rating) == 1)
+		{
+			while (getchar() != '\n')
+				continue;
+			if (temp.rating >= 0 && temp.rating <= 10)
+			{
+				if (AddItem(temp, &movies) == false)
+				{
+					fprintf(stderr, "Problem allocating memory\n");
+					break;
+				}
+				puts("Enter next movie title (empty line to stop): ");
+				break;
+			}
+			else
+				puts("Please enter a number between 0 to 10:");
+			if (ListIsFull(&movies))
+			{
+				puts("The list is now full.");
+				break;
+			}
+		}
+	}
+	//  show //
+	if (ListIsEmpty(&movies))
+		printf("No data entered. ");
+	else
+	{
+		printf("Here is the movie list: \n");
+		Traverse(&movies, showmovies);
+	}
+	printf("You entered %d movied.\n", ListItemCount(&movies));
+	// clear //
+	EmptyTheList(&movies);
+	printf("Bye!\n");
+	return 0;
+}
+void showmovies(Item item)
+{
+	printf("Movie: %s Rating: %d\n", item.title, item.rating);
+}
+
+3.
+films3.c
+#include<stdio.h>
+#include<stdlib.h>
+#include "list.h"
+void showmovies(Item item);
+int main(void)
+{
+	List movies;
+	Item temp;
+	// Initialize //
+	InitializeList(&movies);
+	if (ListIsFull(&movies))
+	{
+		fprintf(stderr, "No memory avaliable! Bye!\n");
+		exit(1);
+	}
+	// 收集并存储 //
+	puts("Enter first movie title: ");
+	while (gets_s(temp.title) != NULL && temp.title[0] != '\0')
+	{
+		puts("Enter your rating <0-10>: ");
+		while (scanf("%d", &temp.rating) == 1)
+		{
+			while (getchar() != '\n')
+				continue;
+			if (temp.rating >= 0 && temp.rating <= 10)
+			{
+				if (AddItem(temp, &movies) == false)
+				{
+					fprintf(stderr, "Problem allocating memory\n");
+					break;
+				}
+				puts("Enter next movie title (empty line to stop): ");
+				break;
+			}
+			else
+				puts("Please enter a number between 0 to 10:");
+			if (ListIsFull(&movies))
+			{
+				puts("The list is now full.");
+				break;
+			}
+		}
+	}
+	//  show //
+	if (ListIsEmpty(&movies))
+		printf("No data entered. ");
+	else
+	{
+		printf("Here is the movie list: \n");
+		Traverse(&movies, showmovies);
+	}
+	printf("You entered %d movied.\n", ListItemCount(&movies));
+	// clear //
+	EmptyTheList(&movies);
+	printf("Bye!\n");
+	return 0;
+}
+void showmovies(Item item)
+{
+	printf("Movie: %s Rating: %d\n", item.title, item.rating);
+}
+
+list.h
+
+#include<stdbool.h>
+#define TSIZE 45
+#define MAXSIZE 100
+struct film
+{
+	char title[TSIZE];
+	int rating;
+};
+typedef struct film Item;
+typedef struct list
+{
+	Item entries[MAXSIZE];
+	int items;
+}List;
+void InitializeList(List *plist);
+bool ListIsEmpty(const List * plist);
+bool ListIsFull(const List * plist);
+unsigned int ListItemCount(const List * plist);
+bool AddItem(Item item, List * plist);
+void Traverse(const List * plist, void(*pfun)(Item item));
+void EmptyTheList(List * plist);
+
+
+list.cpp
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include "list.h"
+void InitializeList(List * plist)
+{
+	plist->items = 0;
+}
+bool ListIsEmpty(const List * plist)
+{
+	if (plist->items == 0)
+		return true;
+	else
+		return false;
+}
+bool ListIsFull(const List * plist)
+{
+	if (plist->items < 10)
+		return false;
+	else
+		return true;
+}
+unsigned int ListItemCount(const List * plist)
+{
+	return (unsigned int)plist->items;
+}
+bool AddItem(Item item, List * plist)
+{
+	if (plist->items >= 10)
+		return false;
+	plist->entries[plist->items + 1] = item;
+	plist->items++;
+	return true;
+}
+void Traverse(const List * plist, void(*pfun)(Item item))
+{
+	int i;
+	for (i = 0;i < plist->items;i++)
+		(*pfun)(plist->entries[i+1]);
+}
+void EmptyTheList(List * plist)
+{
+	plist->items = 0;
+}
+
+4.
+queue.h
+#include<stdbool.h>
+#define MAXQUEUE 10
+typedef struct item
+{
+	long arrive;
+	int processtime;
+} Item;
+typedef struct node
+{
+	Item item;
+	struct node * next;
+} Node;
+typedef struct queue
+{
+	Node * front;
+	Node * rear;
+	int items;
+} Queue;
+void InitializeQueue(Queue *pq);
+bool QueueIsFull(const Queue *pq);
+bool QueueIsEmpty(const Queue *pq);
+int QueueItemCount(const Queue * pq);
+bool EnQueue(Item item, Queue * pq);
+bool DeQueue(Item *pitem, Queue *pq);
+void EmptyTheQueue(Queue * pq);
+
+
+queue.c
+#include<stdio.h>
+#include<stdlib.h>
+#include "queue.h"
+static void CopyToNode(Item item, Node * pn);
+static void CopyToItem(Node * pn, Item *pi);
+void InitializeQueue(Queue * pq)
+{
+	pq->front = pq->rear = NULL;
+	pq->items = 0;
+}
+bool QueueIsFull(const Queue *pq)
+{
+	return pq->items == MAXQUEUE;
+}
+bool QueueIsEmpty(const Queue *pq)
+{
+	return pq->items == 0;
+}
+int QueueItemCount(const Queue * pq)
+{
+	return pq->items;
+}
+bool EnQueue(Item item, Queue * pq)
+{
+	Node * pnew;
+	if (QueueIsFull(pq))
+		return false;
+	pnew = (Node *)malloc(sizeof(Node));
+	if (pnew == NULL)
+	{
+		fprintf(stderr, "Unable to allocate memory!\n");
+		exit(1);
+	}
+	CopyToNode(item, pnew);
+	pnew->next = NULL;
+	if (QueueIsEmpty(pq))
+		pq->front = pnew;
+	else
+		pq->rear->next = pnew;
+	pq->rear = pnew;
+	pq->items++;
+	return true;
+}
+bool DeQueue(Item *pitem, Queue *pq)
+{
+	Node *pt;
+	if (QueueIsEmpty(pq))
+		return false;
+	CopyToItem(pq->front, pitem);
+	pt = pq->front;
+	pq->front = pq->front->next;
+	free(pt);
+	pq->items--;
+	if (pq->items == 0)
+		pq->rear = NULL;
+	return true;
+}
+/* Empty the queue */
+void EmptyTheQueue(Queue * pq)
+{
+	Item dummy;
+	while (!QueueIsEmpty(pq))
+		DeQueue(&dummy, pq);
+}
+static void CopyToNode(Item item, Node * pn)
+{
+	pn->item = item;
+}
+static void CopyToItem(Node * pn, Item *pi)
+{
+	*pi = pn->item;
+}
+
+mall.c
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include "queue.h"
+#define MIN_PER_HR 60.0
+bool newcustomer(double x);
+Item customertime(long when);
+int main(void)
+{
+	char ch;
+	Queue line;
+	Item temp;
+	int hours = 1;
+	int perhour;
+	long cycle, cycle2,cyclelimit;
+	long turnaways = 0;
+	long customers = 0;
+	long served = 0;
+	long sum_line = 0;
+	int wait_time = 0;
+	double min_per_cust;
+	long line_wait = 0;
+	InitializeQueue(&line);
+	puts("Case Study: Sigmund Lander's Advice Booth");
+	puts("Enter the number of simulation hours:");
+	scanf("%d", &hours);
+	cyclelimit = MIN_PER_HR * hours;
+	puts("Enter the average number of customers per hour: ");
+	scanf("%d", &perhour);
+	min_per_cust = MIN_PER_HR / perhour;
+	/* line1 */
+	puts("Queue 1:");
+	srand(time(0));
+	for (cycle = 0;cycle < cyclelimit; cycle++)
+	{
+		if (newcustomer(min_per_cust))
+		{
+			if (QueueIsFull(&line))
+				turnaways++;
+			else
+			{
+				customers++;
+				temp = customertime(cycle);
+				EnQueue(temp, &line);
+			}
+		}
+		if (wait_time <= 0 && !QueueIsEmpty(&line))
+		{
+			DeQueue(&temp, &line);
+			wait_time = temp.processtime;
+			line_wait += cycle - temp.arrive;
+			served++;
+		}
+		if (wait_time > 0)
+			wait_time--;
+		sum_line += QueueItemCount(&line);
+	}
+	if (customers > 0)
+	{
+		printf("customers accepted:%ld\n", customers);
+		printf(" customers served: %ld\n", served);
+		printf("	turnaways: %ld\n", turnaways);
+		printf("average queue size:%.2f\n", (double)sum_line / cyclelimit);
+		printf(" average wait time:%.2f minutes\n", (double)line_wait / served);
+	}
+	else
+		puts("No customers!");
+	EmptyTheQueue(&line);
+	customers = 0;
+	served = 0;
+	turnaways = 0;
+	sum_line = 0;
+	wait_time = 0;
+	line_wait = 0;
+	/* line 2 */
+	puts("Queue 2:");
+	for (cycle2 = 0;cycle2 < cyclelimit; cycle2++)
+	{
+		if (newcustomer(min_per_cust))
+		{
+			if (QueueIsFull(&line))
+				turnaways++;
+			else
+			{
+				customers++;
+				temp = customertime(cycle2);
+				EnQueue(temp, &line);
+			}
+		}
+		if (wait_time <= 0 && !QueueIsEmpty(&line))
+		{
+			DeQueue(&temp, &line);
+			wait_time = temp.processtime;
+			line_wait += cycle2 - temp.arrive;
+			served++;
+		}
+		if (wait_time > 0)
+			wait_time--;
+		sum_line += QueueItemCount(&line);
+	}
+	if (customers > 0)
+	{
+		printf("customers accepted:%ld\n", customers);
+		printf(" customers served: %ld\n", served);
+		printf("	turnaways: %ld\n", turnaways);
+		printf("average queue size:%.2f\n", (double)sum_line / cyclelimit);
+		printf(" average wait time:%.2f minutes\n", (double)line_wait / served);
+	}
+	else
+		puts("No customers!");
+	EmptyTheQueue(&line);
+	puts("Bye!");
+	return 0;
+}
+bool newcustomer(double x)
+{
+	if (rand() * x / RAND_MAX < 1)
+		return true;
+	else
+		return false;
+}
+Item customertime(long when)
+{
+	Item cust;
+	cust.processtime = rand() % 3 + 1;
+	cust.arrive = when;
+	return cust;
+}
+
+
+5.
+stack.h
+#include<stdbool.h>
+typedef char Item;
+#define MAXTSTACK 100
+typedef struct stack
+{
+	Item item[MAXTSTACK];
+	int top;
+}Stack;
+void InitializeStack(Stack * ps);
+bool FullStack(const Stack * ps);
+bool EmptyStack(const Stack *ps);
+bool Push(Item item, Stack * ps);
+bool Pop(Item *pitem, Stack *ps);
+
+
+stack.c
+#include "stack.h"
+#include<stdio.h>
+void InitializeStack(Stack * ps)
+{
+	ps->top = 0;
+}
+bool FullStack(const Stack * ps)
+{
+	return ps->top == MAXTSTACK;
+}
+bool EmptyStack(const Stack *ps)
+{
+	return ps->top == 0;
+}
+bool Push(Item item, Stack * ps)
+{
+	if (ps->top == MAXTSTACK)
+		return false;
+	else
+	ps->item[ps->top++] = item;
+	return true;
+}
+bool Pop(Item *pitem, Stack *ps)
+{
+	if (ps->top == 0)
+		return false;
+	else
+	{
+		ps->top--;
+		*pitem = ps->item[ps->top];
+		return true;
+	}
+}
+
+
+
+st.c
+#include<stdio.h>
+#include "stack.h"
+int main(void)
+{
+	char test[100], ch;
+	Stack st;
+	int i = 0;
+	InitializeStack(&st);
+	puts("Please input a string:(Empty to quit)");
+	while (gets_s(test, 100) && test[0] != '\n')
+	{
+		while (!FullStack(&st) && test[i] != '\0')
+			Push(test[i++], &st);
+		while (!EmptyStack(&st))
+		{
+			Pop(&ch, &st);
+			putchar(ch);
+		}
+		putchar('\n');
+		puts("Enter the next line:");
+	}
+	puts("Done");
+	return 0;
+}
+
+
+6.
+#include<stdio.h>
+#include<stdbool.h>
+bool search(int num[], int n, int search);
+int main(void)
+{
+	int num[100], i;
+	for (i = 1;i <= 100; i++)
+		num[i-1] = i;
+	puts("Enter a number for search");
+	scanf("%d", &i);
+	return search(num, 100, i);
+}
+bool search(int num[], int n, int search)
+{
+	int min = 0, max = n,half = (min + max) / 2;
+	while (search != half)
+	{
+		if (search < half)
+		{
+			max = half;
+			half = (min + max) / 2;
+		}
+		else if (search > half)
+		{
+			min = half;
+			half = (min + max) / 2;
+		}
+		printf("min:%d\tmax:%d\thalf:%d\n", min, max, half);
+	}
+	return true;
+}
+
+
+tree.h
+#include<stdbool.h>
+#define SLEN 81
+typedef struct item
+{
+	char word[SLEN];
+	int count;
+}Item;
+#define MAXITEMS 10
+typedef struct node
+{
+	Item item;
+	struct node * left;
+	struct node * right;
+}Node;
+typedef struct tree
+{
+	Node * root;
+	int size;
+}Tree;
+typedef struct pair {
+	Node * parent;
+	Node * child;
+}Pair;
+void initializeTree(Tree * ptree);
+bool TreeIsEmpty(const Tree * ptree);
+bool TreeIsFull(const Tree * ptree);;
+int TreeItemCount(const Tree * ptree);
+bool AddItem(const Item * pi, Tree * ptree);
+bool Intree(const Item * pi, const Tree * ptree);
+bool DeletItem(const Item * pi, Tree * ptree);
+void Traverse(const Tree * ptree, void(*pfun)(Item item));
+void DeletAll(Tree * ptree);
+Pair SeekItem(const Item * pi, const Tree * ptree);
+
+
+
+tree.cpp
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "tree.h"
+static Node * MakeNode(const Item * pi);
+static bool ToLeft(const Item * i1, const Item * i2);
+static bool ToRight(const Item * i1, const Item * i2);
+static void AddNode(Node * new_node, Node * root);
+static void AddSameNode(Node * new_node, Node * root);
+static void InOrder(const Node * root, void(*pfun)(Item item));
+static void DeleteNode(Node **ptr);
+static void DeleteAllNodes(Node * ptr);
+void initializeTree(Tree * ptree)
+{
+	ptree->root = NULL;
+	ptree->size = 0;
+}
+bool TreeIsEmpty(const Tree * ptree)
+{
+	if (ptree->root == NULL)
+		return true;
+	else
+		return false;
+}
+bool TreeIsFull(const Tree * ptree)
+{
+	if (ptree->size == MAXITEMS)
+		return true;
+	else
+		return false;
+}
+int TreeItemCount(const Tree * ptree)
+{
+	return ptree->size;
+}
+bool AddItem(const Item * pi, Tree * ptree)
+{
+	Node * new_node;
+	if (TreeIsFull(ptree))
+	{
+		fprintf(stderr, "Tree is full\n");
+		return false;
+	}
+	if (SeekItem(pi, ptree).child != NULL)
+	{
+		AddSameNode(SeekItem(pi,ptree).child, ptree->root);
+		return true;
+	}
+	new_node = MakeNode(pi);
+	if (new_node == NULL)
+	{
+		fprintf(stderr, "Couldn't create node\n");
+		return false;
+	}
+	ptree->size++;
+	if (ptree->root == NULL)
+		ptree->root = new_node;
+	else
+		AddNode(new_node, ptree->root);
+	return true;
+}
+bool Intree(const Item * pi, const Tree * ptree)
+{
+	return (SeekItem(pi, ptree).child == NULL) ? false : true;
+}
+bool DeletItem(const Item * pi, Tree * ptree)
+{
+	Pair look;
+	look = SeekItem(pi, ptree);
+	if (look.child == NULL)
+		return false;
+	if (look.parent == NULL)
+		DeleteNode(&ptree->root);
+	else if (look.parent->left == look.child)
+		DeleteNode(&look.parent->left);
+	else
+		DeleteNode(&look.parent->right);
+	ptree->size--;
+	return true;
+}
+void Traverse(const Tree * ptree, void(*pfun)(Item item))
+{
+	if (ptree != NULL)
+		InOrder(ptree->root, pfun);
+}
+void DeletAll(Tree * ptree)
+{
+	if (ptree != NULL)
+		DeleteAllNodes(ptree->root);
+	ptree->root = NULL;
+	ptree->size = 0;
+}
+/* static */
+static void InOrder(const Node * root, void(*pfun)(Item item))
+{
+	if (root != NULL)
+	{
+		InOrder(root->left, pfun);
+		(*pfun)(root->item);
+		InOrder(root->right, pfun);
+	}
+}
+static void DeleteAllNodes(Node * ptr)
+{
+	Node * pright;
+	if (ptr != NULL)
+	{
+		pright = ptr->right;
+		DeleteAllNodes(ptr->left);
+		free(ptr);
+		DeleteAllNodes(pright);
+	}
+}
+static void AddNode(Node * new_node, Node * root)
+{
+	if (ToLeft(&new_node->item, &root->item))
+	{
+		if (root->left == NULL)
+			root->left = new_node;
+		else
+			AddNode(new_node, root->left);
+	}
+	else if (ToRight(&new_node->item, &root->item))
+	{
+		if (root->right == NULL)
+			root->right = new_node;
+		else
+			AddNode(new_node, root->right);
+	}
+	else
+	{
+		fprintf(stderr, "location error in AddNode () \n");
+		exit(1);
+	}
+}
+static void AddSameNode(Node * new_node, Node * root)
+{
+	new_node->item.count++;
+}
+static bool ToLeft(const Item * i1, const Item * i2)
+{
+	int comp1;
+	if ((comp1 = strcmp(i1->word, i2->word)) < 0)
+		return true;
+	else
+		return false;
+}
+static bool ToRight(const Item * i1, const Item * i2)
+{
+	int comp1;
+	if ((comp1 = strcmp(i1->word, i2->word)) > 0)
+		return true;
+	else
+		return false;
+}
+static Node * MakeNode(const Item * pi)
+{
+	Node * new_node;
+	new_node = (Node *)malloc(sizeof(Node));
+	if (new_node != NULL)
+	{
+		new_node->item = *pi;
+		new_node->left = NULL;
+		new_node->right = NULL;
+	}
+	return new_node;
+}
+Pair SeekItem(const Item * pi, const Tree * ptree)
+{
+	Pair look;
+	look.parent = NULL;
+	look.child = ptree->root;
+	if (look.child == NULL)
+		return look;
+	while (look.child != NULL)
+	{
+		if (ToLeft(pi, &(look.child)->item))
+		{
+			look.parent = look.child;
+			look.child = look.child->left;
+		}
+		else if (ToRight(pi, &(look.child->item)))
+		{
+			look.parent = look.child;
+			look.child = look.child->right;
+		}
+		else
+			break;
+	}
+	return look;
+}
+static void DeleteNode(Node **ptr)
+{
+	Node * temp;
+	puts((*ptr)->item.word);
+	if ((*ptr)->left == NULL)
+	{
+		temp = *ptr;
+		*ptr = (*ptr)->right;
+		free(temp);
+	}
+	else if ((*ptr)->right == NULL)
+	{
+		temp = *ptr;
+		*ptr = (*ptr)->right;
+		free(temp);
+	}
+	else
+	{
+		for (temp = (*ptr)->left;temp->right != NULL;temp = temp->right)
+			continue;
+		temp->right = (*ptr)->right;
+		temp = *ptr;
+		*ptr = (*ptr)->left;
+		free(temp);
+	}
+}
+
+
+word.cpp
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+#include<stdlib.h>
+#include "tree.h"
+char menu(void);
+void showall(const Tree * pt);
+void showone(const Tree * pt);
+void printitem(Item item);
+void uppercase(char * str);
+int main(void)
+{
+	FILE *fp;
+	Tree words;
+	Item entry;
+	char choice, filename[SLEN],word[SLEN];
+	initializeTree(&words);
+	puts("Please enter name of file to be processed:");
+	gets_s(filename,SLEN);
+	if ((fp = fopen(filename, "r")) == NULL)
+	{
+		printf("Can't open file %s \n", filename);
+		exit(1);
+	}
+	while (fscanf(fp, "%s", word) == 1 && !TreeIsFull(&words))
+	{
+		uppercase(word);
+		strcpy(entry.word, word);
+		entry.count = 1;
+		AddItem(&entry,&words);
+	}
+	while ((choice = menu()) != 'q')
+	{
+		switch (choice)
+		{
+		case 'a':showall(&words);
+			break;
+		case 'b':showone(&words);
+			break;
+		default:puts("Switching error");
+			DeletAll(&words);
+			puts("Bye.");
+		}
+	}
+	return 0;
+}
+char menu(void)
+{
+	char ch;
+	puts("Word Tree:");
+	puts("Enter the letter corrsponding to your choice: ");
+	puts("a:show all the words");
+	puts("b:search a word");
+	puts("q: quit");
+	while ((ch = getchar()) != EOF)
+	{
+		while (getchar() != '\n')
+			continue;
+		ch = tolower(ch);
+		if (strchr("abq", ch) == NULL)
+			puts("Please enter an a,b,q");
+		else
+			break;
+	}
+	if (ch == EOF)
+		ch = 'q';
+	return ch;
+}
+void showall(const Tree * pt)
+{
+	if (TreeIsEmpty(pt))
+		puts("No word!");
+	else
+		Traverse(pt, printitem);
+}
+void printitem(Item item)
+{
+	printf("word: %-19s count:%-19d\n", item.word, item.count);
+}
+void showone(const Tree * pt)
+{
+	Item temp;
+	if (TreeIsEmpty(pt))
+	{
+		puts("No word!");
+		return;
+	}
+	puts("Please enter a word to find:");
+	gets_s(temp.word,81);
+	printf("%s ", temp.word);
+	uppercase(temp.word);
+	if (Intree(&temp, pt))
+		printf("is a menber,count %d \n", SeekItem(&temp, pt).child->item.count);
+	else
+		printf("is not a member.\n");
+}
+void uppercase(char * str)
+{
+	while (*str)
+	{
+		*str = toupper(*str);
+		str++;
+	}
+}

@@ -1,0 +1,968 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+struct month {
+	char name[10];
+	char abbrev[4];
+	int days;
+	int monnumb;
+};
+const struct month months[12] = {
+	{"January","Jan",31,1},
+	{"February","Feb",28,2},
+	{"March","Mar",31,3},
+	{"April","Apr",30,4},
+	{"May","May",31,5},
+	{"June","Jun",30,6},
+	{"July","Jul",31,7},
+	{"August","Aug",31,8},
+	{"September","Sep",30,9},
+	{"October","Oct",31,10},
+	{"November","Nov",30,11},
+	{"December","Dec",31,12}
+};
+void show(char *m);
+int main(void)
+{
+	char m[10];
+	puts("Please enter the name of a month:(\"Enter\" in the first to quit)");
+	gets_s(m, 10);
+	show(m);
+	return 0;
+}
+void show(char *m)
+{
+	int i, match = 0;
+	while (*m != '\0')
+	{
+		m[0] = toupper(m[0]);
+		for (i = 1;i < strlen(m);i++)
+			m[i] = tolower(m[i]);
+		for (i = 1;i <= 12;i++)
+		{
+			if (strcmp(m, months[i-1].name) == 0)
+			{
+				printf("Month %s is the %dth in order, abbrev is %s ,has %d days.\n", months[i-1].name, months[i-1].monnumb, months[i-1].abbrev, months[i-1].days);
+				match = 1;
+				break;
+			}
+		}
+		if (match == 0)
+			puts("Sorry, No match, Try again.");
+		puts("Please enter the name of a month:(\"Enter\" in the first to quit)");
+		gets_s(m, 10);
+	}
+
+}
+2.
+#include<stdio.h>
+struct month {
+	char name[10];
+	char abbrev[4];
+	int days;
+	int monnumb;
+};
+struct month months[12] = {
+	{ "January","Jan",31,1 },
+	{ "February","Feb",28,2 },
+	{ "March","Mar",31,3 },
+	{ "April","Apr",30,4 },
+	{ "May","May",31,5 },
+	{ "June","Jun",30,6 },
+	{ "July","Jul",31,7 },
+	{ "August","Aug",31,8 },
+	{ "September","Sep",30,9 },
+	{ "October","Oct",31,10 },
+	{ "November","Nov",30,11 },
+	{ "December","Dec",31,12 }
+};
+void count(int d, int m, int y);
+void leap(int y);
+int main(void)
+{
+	int d, m, y;
+	printf("Please input the days, months and years(q in years to quit)\n");
+	while (scanf("%d%d%d", &d, &m, &y) == 3)
+	{
+		leap(y);
+		count(d, m, y);
+		printf("Please input the days, months and years(q in years to quit)\n");
+	}
+	puts("Done.");
+	return 0;
+}
+void count(int d, int m, int y)
+{
+	int i;
+	long days=0;
+	
+	for (i = 1;i <= 12;i++)
+	{
+		if (i == m)
+			break;
+		days += months[i].days;
+	}
+	days += d;
+	printf("There are %ld days in total from %d/%d/%d\n", days, y, m, d);
+}
+void leap(int y)
+{
+	int leap = 0;
+	if (y < 172800)
+	{
+		if (y % 100 == 0)
+		{
+			if (y % 400 == 0)
+				leap = 1;
+		}
+		else if (y % 4 == 0)
+			leap = 1;
+	}
+	else if (y % 172800 == 0 && y % 3200 == 0)
+		leap = 1;
+	if (leap == 1)
+		months[1].days = 29;
+	else
+		months[1].days = 28;
+}
+3.
+#include<stdio.h>
+#include<ctype.h>
+#define MAXTITL 40
+#define MAXAUTL 40
+#define MAXBKS 100
+struct book {
+	char title[MAXTITL];
+	char author[MAXAUTL];
+	float value;
+};
+int count = 0;
+void title_order(struct book * library);
+void price_order(struct book *library);
+int main(void)
+{
+	struct book library[MAXBKS];
+	int index;
+	printf("Please enter the book title.\n");
+	printf("Press [enter] at the start of a line to stop.\n");
+	while (count < MAXBKS && gets_s(library[count].title) != NULL && library[count].title[0] != '\0')
+	{
+		printf("Now enter the author.\n");
+		gets_s(library[count].author, MAXAUTL);
+		printf("Now enter the value.\n");
+		scanf("%f", &library[count++].value);
+		while (getchar() != '\n')
+			continue;
+		if (count < MAXBKS)
+			printf("Enter the next title.\n");
+	}
+	if (count > 0)
+	{
+		puts("input order");
+		printf("Here is the list of your books: \n");
+		for (index = 0; index < count; index++)
+			printf("%s by %s:$%.2f\n", library[index].title, library[index].author, library[index].value);
+		puts("character order");
+		title_order(library);
+		puts("value order");
+		price_order(library);
+	}
+	else
+		puts("NO book?Too bad.");
+	return 0;
+}
+void title_order(struct book * library)
+{
+	extern int count;
+	struct book temp;
+	int i, j;
+	for (i = 0;i < count;i++)
+		for (j = i + 1;j < count;j++)
+			if (library[i].title[0]>library[j].title[0])
+			{
+				temp = library[i];
+				library[i] = library[j];
+				library[j] = temp;
+			}
+	for (i = 0;i < count;i++)
+		printf("%s by %s:$%.2f\n", library[i].title, library[i].author, library[i].value);
+}
+void price_order(struct book *library)
+{
+	extern int count;
+	struct book temp;
+	int i, j;
+	for (i = 0;i < count;i++)
+		for (j = i;j < count;j++)
+			if (library[i].value>library[j].value)
+			{
+				temp = library[j];
+				library[j] = library[i];
+				library[i] = temp;
+			}
+	for (i = 0;i < count;i++)
+		printf("%s by %s:$%.2f\n", library[i].title, library[i].author, library[i].value);
+}
+4.
+#include<stdio.h>
+#include<ctype.h>
+void show(struct person p);
+struct names {
+	char firstn[40];
+	char middlen[40];
+	char lastn[40];
+};
+struct person {
+	double num;
+	struct names name;
+};
+struct person p;
+int main(void)
+{
+	puts("Please enter your first name:");
+	gets_s(p.name.firstn, 40);
+	puts("middle name (if you don't have one,press[Enter])");
+	gets_s(p.name.middlen, 40);
+	puts("last name:");
+	gets_s(p.name.lastn, 40);
+	puts("Your social ID,Please");
+	scanf("%lf", &p.num);
+	show(p);
+	return 0;
+}
+void show(struct person p)
+{
+	printf("%s, %s",p.name.lastn,p.name.firstn);
+	if (p.name.middlen[0] != '\0')
+		printf(" %c. ", toupper(p.name.middlen[0]));
+	printf("- %.0lf\n", p.num);
+}
+5.
+#include<stdio.h>
+#define CSIZE 4
+void get_show(struct student st[]);
+struct name {
+	char lastn[40];
+	char firstn[20];
+};
+struct student {
+	struct name names;
+	float grade[3];
+	float avg;
+};
+int main(void)
+{
+	int n;
+	struct student st[CSIZE] = { { "Tom","Cruize"},{ "D","Howard" },{ "Leborn","James" },{ "James","Harden" } };
+	puts("Please enter the grades of these students(Press [enter to terminate])");
+	get_show(st);
+	return 0;
+}
+void get_show(struct student st[])
+{
+	int i;
+	for (i = 0;i < CSIZE;i++)
+	{
+		printf("Please enter three grades of %s %s\n", st[i].names.lastn, st[i].names.firstn);
+		scanf("%f%f%f", &st[i].grade[0], &st[i].grade[1], &st[i].grade[2]);
+		st[i].avg = (st[i].grade[0] + st[i].grade[1] + st[i].grade[2]) / 3;
+	}
+	for (i = 0;i < CSIZE;i++)
+		printf("%s %s gets %g,%g, and %g, the average is %.2f.\n", st[i].names.lastn, st[i].names.firstn, st[i].grade[0], st[i].grade[1], st[i].grade[2], st[i].avg);
+}
+6.
+#include<stdio.h>
+#define MAX 18
+struct player {
+	int num;
+	char last[10];
+	char first[10];
+	int bat;
+	int hit;
+	int walk;
+	int RBI;
+	float success_rate;
+};
+struct player pl[MAX];
+static int count = 0;
+void get_info(struct player *pl,FILE *fp);
+void process_info(struct player *pl, FILE *fp);
+int main(void)
+{
+	struct player pl[MAX];
+	char file[20];
+	FILE *fp;
+	printf("Please input the filename:");
+	scanf("%s", file);
+	while ((fp = fopen(file, "r")) == NULL)
+	{
+		printf("Can't open file %s", file);
+		scanf("%s", file);
+	}
+	get_info(pl,fp);
+	process_info(pl, fp); 
+	while (fclose(fp) != 0)
+		printf("Unable to close file %s.\n", file);
+	return 0;
+}
+void get_info(struct player *pl, FILE *fp)
+{
+	extern int count;
+	while (fscanf(fp, "%d" "%s" "%s" "%d" "%d" "%d" "%d", &pl[count].num, pl[count].last, pl[count].first, &pl[count].bat, &pl[count].hit, &pl[count].walk, &pl[count].RBI) == 7)
+		count++;
+}
+void process_info(struct player *pl, FILE *fp)
+{
+	extern int count;
+	struct player temp;
+	int i, j, k;
+	for (i = 0;i < count;i++)
+		for (j = i+1;j < count;j++)
+			if (pl[i].num == pl[j].num)
+			{
+				pl[i].bat += pl[j].bat;
+				pl[i].hit += pl[j].hit;
+				pl[i].walk += pl[j].walk;
+				pl[i].RBI += pl[j].RBI;
+				count--;
+				for (k = j;k < count-1;k++) // Ç°ÒÆ
+				{
+					temp = pl[j];
+					pl[j] = pl[j + 1];
+					pl[j + 1] = temp;
+				}
+			}
+	for (i = 0;i < count;i++)
+		pl[i].success_rate = (float)pl[i].hit / (float)pl[i].bat;
+	for (i = 0;i < count;i++)
+	{
+		printf("%s %s\n", pl[i].last, pl[i].first);
+		printf("num:%d\n", pl[i].num);
+		printf("bat:%d\n", pl[i].bat);
+		printf("hit:%d\n", pl[i].hit);
+		printf("walk:%d\n", pl[i].walk);
+		printf("RBI:%d\n", pl[i].RBI);
+		printf("Success rate:%.2f\n", pl[i].success_rate);
+	}
+}
+7.
+#include<stdio.h>
+#include<stdlib.h>
+#define MAXTITL 40
+#define MAXAUTL 40
+#define MAXBRKS 10
+struct book {
+	char title[MAXTITL];
+	char author[MAXAUTL];
+	float value;
+};
+int main(void)
+{
+	struct book library[MAXBRKS], temp;
+	int index, count = 0, size = sizeof(struct book);;
+	FILE * pbooks;
+	char filename[MAXTITL];
+	char choose;
+	puts("Please enter a filename:");
+	while (scanf("%s", filename) != 1)
+		puts("Please enter a file name!");
+	if ((pbooks = fopen(filename, "r+b")) == NULL)
+	{
+		fprintf(stderr, "Can't open %s file.\n", filename);
+		exit(EXIT_FAILURE);
+	}
+	while (count < MAXBRKS && fread(&temp, size, 1, pbooks) == 1)
+	{
+		if (count == 0)
+			puts("Current contents of book.dat: ");
+		printf("%s by %s: $%.2f\n", temp.title, temp.author, temp.value);
+		puts("a:keep\tb:delet");
+		while ((choose = getchar()) == 'a' || choose == 'b')
+		{
+			if (choose == 'a')
+				library[count++] = temp;
+			while (getchar() != '\n')
+				continue;
+		}
+	}
+	if (count == MAXBRKS)
+		fputs("Read 10 books in total!",stdout);
+		rewind(pbooks);
+	for (index = 0;index < count;index++)
+		fwrite(&library[index], size, 1, pbooks);
+	if (fclose(pbooks) != 0)
+		fprintf(stderr,"Can't close file %s\n", filename);
+	return 0;
+
+}
+8.
+#include<stdio.h>
+#include<stdbool.h>
+#include<stdlib.h>
+#define SEAT 12
+struct giant {
+	int num;
+	bool mark;
+	char firstn[40];
+	char lastn[40];
+};
+struct giant flight[SEAT] = { { 1,true,"Zpoint","Guo" } ,{ 4,true,"James","Harden" } ,{ 6,true,"Dw","Hword" } ,{7,true,"Stephen","Curry"} };
+int num[SEAT];
+int size = sizeof(struct giant);
+void show_menu(void);
+void a_show_num(void);
+void b_show_lst(struct giant *flight);
+void c_show_al(struct giant *flight);
+void d_assign(struct giant *flight);
+void e_del(struct giant *flight);
+void f_write(struct giant *flight);
+void f_read(struct giant *flight);
+int main(void)
+{
+	char choose;
+	extern int size;
+	int count = 0;
+	show_menu();
+	while ((choose = getchar()) != 'f')
+	{
+		while (getchar() != '\n')
+			continue;
+		if (count++ == 0)
+			f_write(flight);
+		f_read(flight);
+		switch (choose)
+		{
+		case 'a':a_show_num();
+			break;
+		case 'b':b_show_lst(flight);
+			break;
+		case 'c':c_show_al(flight);
+			break;
+		case 'd':d_assign(flight);
+			f_write( flight);
+			break;
+		case 'e':e_del(flight);
+			f_write(flight);
+			break;
+		case 'f':puts("Done");
+			exit(1);
+		}
+		show_menu();
+	}
+	return 0;
+}
+void f_write(struct giant *flight)
+{
+	FILE *fp;
+	extern int size;
+	if ((fp = fopen("file.txt", "w+b")) == NULL)
+	{
+		fputs("Can't open flie.txt file for writing\n", stderr);
+		exit(1);
+	}
+	fwrite(flight, size, SEAT, fp);
+	if (fclose(fp) != 0)
+		fprintf(stderr, "Error closing file for writing");
+}
+void f_read( struct giant *flight)
+{
+	FILE *fp;
+	extern int size;
+	if ((fp = fopen("file.txt", "rb")) == NULL)
+	{
+		fputs("Can't open file.txt for reading", stderr);
+		exit(1);
+	}
+	fread(flight, size, SEAT, fp);
+	if (fclose(fp) != 0)
+		fputs("Error closing file for reading", stderr);
+}
+void show_menu(void)
+{
+	puts("To choose a function,enter its letter label;");
+	puts("a) Show number of empty seats");
+	puts("b) Show list of empty seats");
+	puts("c) Show alphhabetical list of seats");
+	puts("d) Assign a customer to a seat assignment");
+	puts("e) Delete a seat assignment");
+	puts("f) Quit");
+}
+void a_show_num(void)
+{
+	int i;
+	extern int num[SEAT];
+	for (i = 0;i < SEAT;i++)
+		num[i] = i;
+	for (i = 1;i <= SEAT;i++)
+		if (flight[i-1].num != 0)
+			num[flight[i-1].num] = 0;
+	puts("Enepty seats:");
+	for (i = 0;i < SEAT;i++)
+		if (num[i] != 0)
+		{
+			printf("%d\t", num[i]);
+			if (i == SEAT - 1)
+				putchar('\n');
+		}
+}
+void b_show_lst(struct giant *flight)
+{
+	int i, j;
+	struct giant temp;
+	for (i = 0;i < SEAT;i++)
+		for (j = i + 1;j < SEAT;j++)
+			if (flight[i].num > flight[j].num && flight[j].num != 0)
+			{
+				temp = *(flight + i);
+				*(flight + i) = *(flight + j);
+				*(flight + j) = temp;
+			}
+	for (i = 0;i < SEAT;i++)
+	{
+		if (flight[i].mark == true)
+		{
+			printf("num:%d\n", flight[i].num);
+            printf("%s %s\n", flight[i].firstn, flight[i].lastn);
+		}
+	}
+}
+void c_show_al(struct giant *flight)
+{
+	int i, j;
+	struct giant temp;
+	for (i = 0;i < SEAT;i++)
+		for (j = 0;j < SEAT;j++)
+			if (flight[i].firstn[0] < flight[j].firstn[0])
+			{
+				temp = *(flight + i);
+				*(flight + i) = *(flight + j);
+				*(flight + j) = temp;
+			}
+	for (i = 0;i < SEAT;i++)
+		if (flight[i].mark == true)
+		{
+			printf("num:%d\n", flight[i].num);
+			printf("%s %s\n", flight[i].firstn, flight[i].lastn);
+		}
+}
+void d_assign(struct giant *flight)
+{
+	int i, j, k;
+	bool repeat = true;
+	extern int num[SEAT];
+	for (i = 0;i < SEAT;i++)
+		if (flight[i].mark == false)
+		{
+			puts("Enter last name:");
+			gets_s((flight + i)->lastn, 40);
+			puts("First name:");
+			gets_s((flight+i)->firstn, 40);
+			puts("Please choose a number among:");
+			a_show_num();
+			while (repeat)
+			{
+				scanf("%d", &j);
+				while (getchar() != '\n')
+					continue;
+				for (k = 0;k < SEAT;k++)
+					if (num[k] == j)
+						repeat = false;
+				if(repeat)
+					printf("Sorry ,seat number %d had been already taken, Please try again.", j);
+			}
+			(flight + i)->num = j;
+			(flight+i) -> mark = true;
+			break;
+		}
+	if (i == 11)
+		puts("Sorry, no more seat avaliable");
+}
+void e_del(struct giant *flight)
+{
+	int num[SEAT];
+	int i, j, temp;
+	bool match;
+	struct giant del = {0,false,"",""};
+	for (i = 0;i < SEAT;i++)
+		if (flight[i].num != 0)
+			num[i] = flight[i].num;
+	for (i = 0;i < SEAT;i++)
+		for (j = i + 1;j < SEAT;j++)
+			if (num[i] > num[j])
+			{
+				temp = num[i];
+				num[i] = num[j];
+				num[j] = temp;
+			}
+	printf("Please choose a seat to delet:(q to quit)");
+	for (i = 0;i < SEAT;i++)
+		if (num[i] != 0)
+			printf("%d\t", num[i]);
+	putchar('\n');
+	while (scanf("%d", &j) == 1)
+	{
+		while (getchar() != '\n')
+			continue;
+		for (i = 0;i < SEAT;i++)
+			if (num[i] == j)
+				match = true;
+		if (match)
+			break;
+		else
+			continue;
+	}
+	for (i = 0;i < SEAT;i++)
+		if (flight[i].num == j)
+		{
+			printf("%s %s , SEAT number:%d has been deleted\n", flight[i].firstn, flight[i].lastn, flight[i].num);
+			*(flight + i) = del;
+			break;
+		}
+
+}
+9.
+#include<stdio.h>
+#include<stdbool.h>
+#include<stdlib.h>
+#define SEAT 12
+#define FLY 4
+
+struct giant {
+	int num;
+	bool mark;
+	char firstn[40];
+	char lastn[40];
+};
+struct giant flight[FLY][SEAT] = { { 1,true,"Zpoint","Guo" } ,{ 4,true,"James","Harden" } ,{ 6,true,"Dw","Hword" } ,{ 7,true,"Stephen","Curry" } };
+int num[SEAT];
+int fl;
+int size = sizeof(struct giant);
+const char filename[FLY][SEAT] = { "102.txt","311,txt","444.txt","519.txt" };
+
+void show_menu(void);
+void a_show_num(void);
+void b_show_lst(struct giant *flight);
+void c_show_al(struct giant *flight);
+void d_assign(struct giant *flight);
+void e_del(struct giant *flight);
+void f_write(struct giant *flight);
+void f_read(struct giant *flight);
+void inside_flight(struct giant (*flight)[SEAT]);
+int main(void)
+{
+	char  fly;
+	extern int fl;
+	puts("There are 4 flights in total,Please select a flight number:(q to quit)");
+	printf("a:102\tb:311\nc:444\td:519\n");
+	while (scanf("%c", &fly) == 1 && fly != 'q')
+	{
+		while (getchar() != '\n')
+			continue;
+		switch (fly)
+		{
+		case 'a':fl = 0;
+			inside_flight(flight);
+			break;
+		case 'b':fl = 1;
+			inside_flight(flight);
+			break;
+		case 'c':fl = 2;
+			inside_flight(flight);
+			break;
+		case 'd':fl = 3;
+			inside_flight(flight);
+			break;
+		default:
+			break;
+		}
+		puts("There are 4 flights in total,Please select a flight number:(q to quit)");
+		printf("a:102\tb:311\nc:444\td:519\n");
+	}
+	puts("Done.");
+	return 0;
+}
+void inside_flight(struct giant(*flight)[FLY])
+{
+	char choose;
+	extern int fl;
+	int count = 0;
+	show_menu();
+	while ((choose = getchar()) != 'f')
+	{
+		while (getchar() != '\n')
+			continue;
+		if (count++ == 0)
+			f_write(flight[fl]);
+		f_read(flight[fl]);
+		switch (choose)
+		{
+		case 'a':a_show_num();
+			break;
+		case 'b':b_show_lst(flight[fl]);
+			break;
+		case 'c':c_show_al(flight[fl]);
+			break;
+		case 'd':d_assign(flight[fl]);
+			f_write(flight[fl]);
+			break;
+		case 'e':e_del(flight[fl]);
+			f_write(flight[fl]);
+			break;
+		case 'f':puts("Done");
+			exit(1);
+		}
+		show_menu();
+	}
+}
+void f_write(struct giant *flight)
+{
+	FILE *fp;
+	if ((fp = fopen(filename[fl], "w+b")) == NULL)
+	{
+		fputs("Can't open flie.txt file for writing\n", stderr);
+		exit(1);
+	}
+	fwrite(flight, size, SEAT, fp);
+	if (fclose(fp) != 0)
+		fprintf(stderr, "Error closing file for writing");
+}
+void f_read(struct giant *flight)
+{
+	FILE *fp;
+	if ((fp = fopen(filename[fl], "rb")) == NULL)
+	{
+		fputs("Can't open file.txt for reading", stderr);
+		exit(1);
+	}
+	fread(flight, size, SEAT, fp);
+	if (fclose(fp) != 0)
+		fputs("Error closing file for reading", stderr);
+}
+void show_menu(void)
+{
+	puts("To choose a function,enter its letter label;");
+	puts("a) Show number of empty seats");
+	puts("b) Show list of empty seats");
+	puts("c) Show alphhabetical list of seats");
+	puts("d) Assign a customer to a seat assignment");
+	puts("e) Delete a seat assignment");
+	puts("f) Quit");
+}
+void a_show_num(void)
+{
+	int i;
+	for (i = 0;i < SEAT;i++)
+		num[i] = i;
+	for (i = 1;i <= SEAT;i++)
+		if (flight[fl][i - 1].num != 0)
+			num[flight[fl][i - 1].num] = 0;
+	puts("Enepty seats:");
+	for (i = 0;i < SEAT;i++)
+		if (num[i] != 0)
+		{
+			printf("%d\t", num[i]);
+			if (i == SEAT - 1)
+				putchar('\n');
+		}
+}
+void b_show_lst(struct giant *flight)
+{
+	int i, j;
+	struct giant temp;
+	for (i = 0;i < SEAT;i++)
+		for (j = i + 1;j < SEAT;j++)
+			if (flight[i].num > flight[j].num && flight[j].num != 0)
+			{
+				temp = *(flight + i);
+				*(flight + i) = *(flight + j);
+				*(flight + j) = temp;
+			}
+	for (i = 0;i < SEAT;i++)
+	{
+		if (flight[i].mark == true)
+		{
+			printf("num:%d\n", flight[i].num);
+			printf("%s %s\n", flight[i].firstn, flight[i].lastn);
+		}
+	}
+}
+void c_show_al(struct giant *flight)
+{
+	int i, j;
+	struct giant temp;
+	for (i = 0;i < SEAT;i++)
+		for (j = 0;j < SEAT;j++)
+			if (flight[i].firstn[0] < flight[j].firstn[0])
+			{
+				temp = *(flight + i);
+				*(flight + i) = *(flight + j);
+				*(flight + j) = temp;
+			}
+	for (i = 0;i < SEAT;i++)
+		if (flight[i].mark == true)
+		{
+			printf("num:%d\n", flight[i].num);
+			printf("%s %s\n", flight[i].firstn, flight[i].lastn);
+		}
+}
+void d_assign(struct giant *flight)
+{
+	int i, j, k;
+	bool repeat = true;
+	extern int num[SEAT];
+	for (i = 0;i < SEAT;i++)
+		if (flight[i].mark == false)
+		{
+			puts("Enter last name:");
+			gets_s((flight + i)->lastn, 40);
+			puts("First name:");
+			gets_s((flight + i)->firstn, 40);
+			puts("Please choose a number among:");
+			a_show_num();
+			while (repeat)
+			{
+				scanf("%d", &j);
+				while (getchar() != '\n')
+					continue;
+				for (k = 0;k < SEAT;k++)
+					if (num[k] == j)
+						repeat = false;
+				if (repeat)
+					printf("Sorry ,seat number %d had been already taken, Please try again.", j);
+			}
+			(flight + i)->num = j;
+			(flight + i)->mark = true;
+			break;
+		}
+	if (i == 11)
+		puts("Sorry, no more seat avaliable");
+}
+void e_del(struct giant *flight)
+{
+	int num[SEAT];
+	int i, j, temp;
+	bool match;
+	struct giant del = { 0,false,"","" };
+	for (i = 0;i < SEAT;i++)
+		if (flight[i].num != 0)
+			num[i] = flight[i].num;
+	for (i = 0;i < SEAT;i++)
+		for (j = i + 1;j < SEAT;j++)
+			if (num[i] > num[j])
+			{
+				temp = num[i];
+				num[i] = num[j];
+				num[j] = temp;
+			}
+	printf("Please choose a seat to delet:(q to quit)");
+	for (i = 0;i < SEAT;i++)
+		if (num[i] != 0)
+			printf("%d\t", num[i]);
+	putchar('\n');
+	while (scanf("%d", &j) == 1)
+	{
+		while (getchar() != '\n')
+			continue;
+		for (i = 0;i < SEAT;i++)
+			if (num[i] == j)
+				match = true;
+		if (match)
+			break;
+		else
+			continue;
+	}
+	for (i = 0;i < SEAT;i++)
+		if (flight[i].num == j)
+		{
+			printf("%s %s , SEAT number:%d has been deleted\n", flight[i].firstn, flight[i].lastn, flight[i].num);
+			*(flight + i) = del;
+			break;
+		}
+
+}
+10.
+#include<stdio.h>
+typedef void(*fun)(double,double);
+void plus(double x,double y);
+void minutes(double x,double y);
+void mutiply(double x, double y);
+void divide(double x, double y);
+int main(void)
+{
+	double x, y;
+	char choose;
+	fun f[4] = { plus,minutes,mutiply,divide };
+	printf("Please enter two float: x & y\n");
+	scanf("%lf", &x);
+	scanf("%lf", &y);
+	printf("Please select(q to quit)\n a: x + y\t b: x - y\n c: x * y\t d: x % y\n");
+	while (getchar() != '\n')
+		continue;
+	while (scanf("%c", &choose) == 1 && choose != 'q')
+	{
+		while (getchar() != '\n')
+			continue;
+		switch (choose)
+		{
+		case 'a':f[0](x, y);
+			break;
+		case 'b':(*f[1])(x, y);
+			break;
+		case 'c':f[2](x, y);
+			break;
+		case 'd':(*f[3])(x, y);
+			break;
+		default:
+			puts("Invalid input");
+			break;
+		}
+		printf("Please select(q to quit)\n a: x + y\t b: x - y\n c: x * y\t d: x % y\n");
+	}
+	return 0;
+}
+void plus(double x, double y)
+{
+	printf("%g + %g is %g\n", x,y,x+y);
+}
+void minutes(double x, double y)
+{
+	printf("%g - %g is %g\n", x,y,x-y);
+}
+void mutiply(double x, double y)
+{
+	printf("%g * %g is %g\n", x, y, x * y);
+}
+void divide(double x, double y)
+{
+	printf("%g % %g is %g\n", x, y, x / y);
+}
+11.
+#include<stdio.h>
+typedef double(*function)(double);
+double ten_times(double a);
+void transform(double * source,double *target,int x, function sin);
+int main(void)
+{
+	int i;
+	double source[100], target[100];
+	function sin = ten_times;
+	for (i = 0;i < 100; i++)
+	source[i] = ((double)i+1)/100;
+	transform(source, target, 100, sin);
+	return 0;
+}
+double ten_times(double a)
+{
+	return a * 10;
+}
+void transform(double * source, double *target, int x, function sin)
+{
+	int i;
+	for (i = 0;i < x;i++)
+	{
+		*(target + i) = sin(*(source + i));
+		printf("%g\t", *(target + i));
+		if ((i + 1) % 10 == 0)
+			putchar('\n');
+	}
+}

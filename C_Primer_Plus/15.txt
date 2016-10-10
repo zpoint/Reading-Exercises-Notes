@@ -1,0 +1,346 @@
+1.
+#include<stdio.h>
+#include<stdbool.h>
+#include<string.h>
+int btoi(char * pbin);
+int pow(int i, int j);
+bool check(char * pbin);
+int main(void)
+{
+	char pbin[8 * sizeof(int) + 1];
+	printf("Please enter a binary number up to %d digits:\n", 8 * sizeof(int));
+	while (gets_s(pbin, 8 * sizeof(int)))
+	{
+		if (!check(pbin))
+		{
+			puts("Please enter '0' or '1' ");
+			break;
+		}
+		printf("%s is %d \n", pbin, btoi(pbin));
+		printf("Please enter a binary number up to %d digits:\n", 8 * sizeof(int));
+	}
+	return 0;
+}
+int btoi(char * pbin)
+{
+	int val, i;
+	for (i = strlen(pbin), val = 0;*pbin != '\0';i--)
+	{
+		val += pow(2, i-1) * (*pbin - '0');
+		pbin++;
+	}
+	return val;
+}
+bool check(char * pbin)
+{
+	while (*pbin != '\0')
+	{
+		if (*pbin != '0' && *pbin != '1')
+			return false;
+		*pbin++;
+	}
+	return true;
+}
+int pow(int i, int j)
+{
+	int k, value = i;
+	if (j == 1 || j == 0)
+	{
+		if (j == 1)
+			return i;
+		else
+			return 1;
+	}
+		for (k = 1;k < j;k++)
+		value *= i;
+		return value;
+}
+2.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int pow(int i, int j);
+int sttoi(char *bin);
+char * itob(int dec, char *bin);
+int main(int argc, char *argv[])
+{
+	int b1, b2;
+	char bst1[sizeof(int) * 8 + 1];
+	char bst2[sizeof(int) * 8 + 1];
+	if (argc != 3)
+	{
+		fprintf(stderr, "Usage %s binarynum1 binarynum2\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+	b1 = sttoi(argv[1]);
+	b2 = sttoi(argv[2]);
+	printf("%s : ~%s is %s\n", argv[1], argv[1], itob(~b1, bst1));
+	printf("%s : ~%s is %s\n", argv[2], argv[2], itob(~b2, bst2));
+	printf("%s & %s is %s\n", argv[1], argv[2], itob((b1 & b2), bst1));
+	printf("%s | %s is %s\n", argv[1], argv[2], itob((b1 | b2), bst1));
+	printf("%s ^ %s is %s\n", argv[1], argv[2], itob((b1 ^ b2), bst1));
+	return 0;
+}
+int sttoi(char *bin)
+{
+	int i;
+	double val;
+	for (i = strlen(bin), val = 0;*bin != '\0';i--)
+	{
+		val += pow(2, i - 1) * (*bin - '0');
+		*bin++;
+	}
+	return val;
+}
+char * itob(int dec, char *bin)
+{
+	int size = 8 * sizeof(int);
+	int i, j;
+	for (i = size-1;i >= 0;dec >>= 1,i--)
+	*(bin + i) = (01 & dec) + '0';
+	*(bin + size) = '\0';
+	return bin;
+}
+int pow(int i, int j)
+{
+	int k, value = i;
+	if (j == 1 || j == 0)
+	{
+		if (j == 1)
+			return i;
+		else
+			return 1;
+	}
+	for (k = 1;k < j;k++)
+		value *= i;
+	return value;
+}
+3.
+#include<stdio.h>
+char * itob(int num, char * b);
+int count;
+int main(void)
+{
+	int num, i;
+	char b[sizeof(int) * 8 + 1];
+	printf("Please input an int number:\n");
+	while (scanf("%d", &num) == 1)
+	{
+		while (getchar() != '\n')
+			continue;
+		itob(num, b);
+		printf("%d in binary is ", num);
+		for (i = 0;i <= sizeof(int) * 8;i++)
+			putchar(b[i]);
+		printf("\n the open bits is %d in total", count);
+		count = 0;
+		printf("\nPlease input an int number:\n");
+	}
+	return 0;
+}
+char * itob(int num, char *b)
+{
+	static int size = sizeof(int) * 8;
+	int i;
+	for (i = size - 1;i >= 0;i--, num >>= 1)
+	{
+		*(b + i) = (01 & num) + '0';
+		if ((01 & num) == 1)
+			count++;
+	}
+	*(b + size) = '\0';
+	return b;
+}
+4.
+#include<stdio.h>
+int fun(int num,int loc);
+char * itob(int num);
+char bin[ sizeof(int)*8 + 1];
+int size =  sizeof(int) * 8;
+int main(void)
+{
+	int num, loc;
+	printf("Please enter a num and a location:(q to qiut)\n");
+	while (scanf("%d%d", &num, &loc) == 2)
+	{
+		printf("%d is %s in binary and the %dth location is ", num, itob(num), loc);
+		if (fun(num, loc))
+			printf("true\n");
+		else printf("false\n");
+		printf("Please enter a num and a location:(q to qiut)\n");
+	}
+	return 0;
+}
+char * itob(int num)
+{
+	int i;
+	for (i = size-1;i >= 0;i--,num>>=1)
+		*(bin + i) = (num & 01) + '0';
+	*(bin + size) = '\0';
+	return bin;
+}
+int fun(int num, int loc)
+{
+	if (*(bin + size - loc) == '1')
+		return true;
+	else
+		return false;
+}
+5.
+#include<stdio.h>
+#include<string.h>
+int rotate(int x, int y);
+int btoi(char *b);
+char * itob(int num);
+int pow(int i, int j);
+char bin[9];
+char bin2[9];
+int size = 8;
+int main(void)
+{
+	int num, y, ro;
+	puts("Please enter a number and rotate number:(q to quit)");
+	while (scanf("%d%d", &num, &y) == 2)
+	{
+		printf("Before %d in binary is %s\n", num, itob(num));
+		ro = rotate(num, y);
+		printf("After rotate:\n%s in dec is %d", bin2, ro);
+		puts("\nPlease enter a number and rotate number:(q to quit)");
+	}
+	return 0;
+}
+char * itob(int num)
+{
+	int i;
+	for (i = 7;i >= 0;i--, num >>= 1)
+		*(bin + i) = (num & 01) + '0';
+	*(bin + 8) = '\0';
+	return bin;
+}
+int rotate(int x, int y)
+{
+	int i, j;
+	for (i = 0;i < y; i++,x>>=1)
+	*(bin2 + i) = (x & 01) + '0';
+	for (j = size - 1;j >= i;j--, x >>= 1)
+	*(bin2 + j) = (x & 01) + '0';
+	*(bin2 + 8) = '\0';
+	return btoi(bin2);
+}
+int btoi(char *b)
+{
+	int i, val;
+	for (i = strlen(b), val = 0;*b != '\0';i--)
+	{
+		val += pow(2, i - 1) * (*b - '0');
+		*b++;
+	}
+	return val;
+}
+int pow(int i, int j)
+{
+	int k, value = i;
+	if (j == 1 || j == 0)
+	{
+		if (j == 1)
+			return i;
+		else
+			return 1;
+	}
+	for (k = 1;k < j;k++)
+		value *= i;
+	return value;
+}
+6.
+#include<stdio.h>
+#define ON 1
+#define OFF 0
+#define LEFT 0
+#define CENTER 1
+#define RIGHT 2
+struct FONTS {
+	unsigned int ID : 8;
+	unsigned int Size : 7;
+	unsigned int Allignment :2;
+	unsigned int Bold : 1;
+	unsigned int Italic : 1;
+	unsigned int Underline : 1;
+};
+struct FONTS font = { 1,12,LEFT,OFF,OFF,OFF };
+char *ali = "left";
+int main(void)
+{
+	char choose, inpuc;
+	int inpu;
+	char id[3] = "ID", size[5] = "SIZE", alignment[10] = "ALIGNMENT", b[2] = "B", i[2] = "I", u[2] = "U";
+	printf("%-5s%-5s%-11s%-5s%-5s%-5s\n", id, size, alignment, b, i, u);
+	printf("%-5d%-5d", font.ID, font.Size);
+	printf("%-11s", ali);
+	printf("%-5s%-5s%-5s\n", font.Bold == 1 ? "on" : "off",font.Italic == 1?"on":"off",font.Underline == 1?"on":"off");
+	putchar('\n');
+	puts("f)change font s)change size a)change alignment");
+	puts("b)toggle bold i)toggle italic u)toggle underline");
+	puts("q)quit");
+	while (scanf("%c", &choose) == 1 && choose != 'q')
+	{
+		while (getchar() != '\n')
+			continue;
+		switch (choose)
+		{
+		case 'f': printf("Enter font ID(0~255)");
+			if (scanf("%d", &inpu) == 1 && inpu<=255 && inpu>=0)
+			{
+				while (getchar() != '\n')
+					continue;
+				font.ID = inpu;
+			}
+			else puts("Invalid input");
+			break;
+		case 's':printf("Enter font size(0~127):");
+			if (scanf("%d", &inpu) == 1 && inpu <= 127 && inpu >= 0)
+			{
+				while (getchar() != '\n')
+					continue;
+				font.Size = inpu;
+			}
+			else puts("Invalid input");
+			break;
+		case 'a':puts("Select alignment:");
+			puts("l)left c)center r)right");
+			if (scanf("%c", &inpuc) == 1 && (inpuc == 'l' || inpuc == 'c' || inpuc == 'r'))
+			{
+				while (getchar() != '\n')
+					continue;
+				if (inpuc == 'l')
+				{
+					font.Allignment = 0;
+					ali = "left";
+				}
+				else
+				{
+					font.Allignment = (inpuc == 'c' ? 1 : 2);
+					ali = (font.Allignment == 1 ? "center" : "right");
+				}
+			}
+			break;
+		case 'b':font.Bold = !font.Bold;
+			break;
+		case 'i':font.Italic = !font.Italic;
+			break;
+		case 'u':font.Underline = !font.Underline;
+			break;
+		default:puts("Invalid input");
+			break;
+		}
+		printf("%-5s%-5s%-11s%-5s%-5s%-5s\n", id, size, alignment, b, i, u);
+		printf("%-5d%-5d", font.ID, font.Size);
+		printf("%-11s", ali);
+		printf("%-5s%-5s%-5s\n", font.Bold == 1 ? "on" : "off", font.Italic == 1 ? "on" : "off", font.Underline == 1 ? "on" : "off");
+		putchar('\n');
+		puts("f)change font s)change size a)change alignment");
+		puts("b)toggle bold i)toggle italic u)toggle underline");
+		puts("q)quit");
+	}
+	return 0;
+}
+7.

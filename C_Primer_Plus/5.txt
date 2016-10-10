@@ -1,0 +1,134 @@
+#include<stdio.h>
+#define HOUR 60
+int main(void)
+{
+	int minutes;
+	printf("Please Enter the minutes:\n");
+	scanf("%d",&minutes);
+	while (minutes > 0)
+	{
+		printf("%d Hours and %d minutes\n", minutes / HOUR, minutes%HOUR);
+		printf("Please input the minutes:\n");
+		scanf("%d", &minutes);
+	}
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	int num, n = 0;
+	printf("Please enter the number:\n");
+	scanf("%d", &num);
+	while (n < 11)
+	{
+		printf("%d\n", num);
+		num++;
+		n++;
+	}
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	const int WEEKDAY=7;
+	int days = 1;
+	while (days > 0)
+	{
+		printf("Please Enter the days:\n");
+		scanf("%d", &days);
+		printf("%d days are %d weeks, %d days\n", days, days / WEEKDAY, days%WEEKDAY);
+	}
+	return 0;
+}
+
+
+
+#include<stdio.h>
+#define INCH 2.54
+int main(void)
+{
+	float height;
+	printf("Enter a height in centimeters:");
+	scanf("%f", &height);
+	while (height > 0)
+	{
+		printf("%.1f cm = %d feet, %.1f inches\n", height, int(height / INCH / 12), height / INCH - int(height / INCH/12)*12);
+		printf("Enter a height in centimeters:(<=0 to quit)");
+		scanf("%f", &height);
+	}
+	printf("bye\n");
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	int count = 0, sum = 0,num = 1;
+	while (count++ < 20)
+	{
+		printf("Day %d you get $%d\n", num,num);
+		num++;
+		sum = sum + num;
+	}
+	printf("Finally you get $%d\n", sum);
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	int count = 1, sum = 0, num = 1, day = 1;
+	while (count++ < 20)
+	{
+		printf("Day %d you get $%d\n", day, num);
+		num = count *count;
+		sum = sum + num;
+		day++;
+	}
+	printf("Finally you get $%d\n", sum);
+	return 0;
+}
+}
+
+#include<stdio.h>
+int main(void)
+{
+	float num;
+	printf("Please enter a number:\n");
+	scanf("%f", &num);
+	printf("The cube of %f is %f", num, num*num*num);
+	return 0;
+}
+
+
+
+
+#include<stdio.h>
+void Temperatures(double);
+int main(void)
+{
+	double Fahrenheit;
+	int n=1;
+	printf("Please enter Fahrenheit:\n");
+	while(n>0)
+	{   
+		scanf("%f", &Fahrenheit);
+		Temperatures(Fahrenheit);
+		printf("Please input Fahrenheit:\n");
+	}
+	printf("end\n");
+	return 0;
+}
+void Temperatures(double Fahrenheit)
+{
+	const double a = 1.8, b = 32.0, c = 273.16;
+	printf("Fahrenheit = %.2f\n", Fahrenheit);
+	printf("Celsius = %.2f\n", Fahrenheit*a + b);
+	printf("Kelvin = %.2f\n", Fahrenheit*a + b + c);
+}

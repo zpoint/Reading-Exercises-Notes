@@ -1,0 +1,529 @@
+fp = fopen("xiongshuai.txt","r");//此处第一个参数，可以修给成你需要的文本文档绝对路径
+//并且需要用双反斜杠如 C:\\document and settings\\xiongshuai.txt
+1.
+#include<stdio.h>
+#include<stdlib.h>
+int main(void)
+{
+	int ch;
+	FILE *fp;
+	long count=0;
+	char name[41];
+	puts("Input file name:");
+	scanf("%s", name);
+	if ((fp = fopen(name, "r")) == NULL)
+	{
+		printf("Can't open %s\n", name);
+		exit(1);
+	}
+	while ((ch = getc(fp)) != EOF)
+	{
+		putc(ch, stdout);
+		count++;
+	}
+	fclose(fp);
+	printf("File %s has %ld characters\n", name, count);
+	return 0;
+}
+2.
+#include<stdio.h>
+#include<stdlib.h>
+int main(int argc, char *argv[])
+{
+	int ch;
+	FILE *source, *destination;
+	if ((source = fopen(argv[1], "rb")) == NULL)
+	{
+		printf("Can't open %s\n", argv[1]);
+		exit(1);
+	}
+	if ((destination = fopen(argv[2], "wb")) == NULL)
+	{
+		printf("Can't open %s\n", argv[2]);
+		exit(1);
+	}
+	while ((ch = getc(source)) != EOF)
+	putc(ch, destination);
+	fclose(source);
+	fclose(destination);
+	printf("Copy finished\n");
+	return 0;
+}
+3.
+#include<stdio.h>
+#include<stdlib.h>
+#include<ctype.h>
+int main(void)
+{
+	char ch, name1[41], name2[41];
+	FILE *source, *destination;
+	puts("Plese input the source File's name:");
+	scanf("%s", name1);
+	puts("Please input the destination File's name:");
+	scanf("%s", name2);
+	if ((source = fopen(name1, "r")) == NULL)
+	{
+		printf("Can't open %s.\n", name1);
+		exit(1);
+	}
+	if ((destination = fopen(name2, "w")) == NULL)
+	{
+		printf("Can't open %s.\n", name2);
+		exit(1);
+	}
+	while ((ch = getc(source)) != EOF)
+	{
+		putc(toupper(ch), destination);
+	}
+	puts("Copy finished");
+	return 0;
+}
+
+4.（不支持console.h）
+#include<stdio.h>
+#include<stdlib.h>
+int main(int argc, char *argv[])
+{
+	int byte, filect;
+	FILE *source;
+	if (argc == 1)
+	{
+		printf("Usage: %s filename[s]\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+	for (filect = 1;filect < 4;filect++)
+	{
+		if ((source = fopen(argv[filect], "r")) == NULL)
+		{
+			printf("Can't open file %s for input\n", argv[filect]);
+			continue;
+		}
+		while ((byte = getc(source)) != EOF)
+			putchar(byte);
+		if (fclose(source) != 0)
+			printf("Can't close file %s\n", argv[filect]);
+	}
+	return 0;
+}
+5.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define BUFSIZE 1024
+#define SLEN 81
+void append(FILE *source, FILE *dest);
+int main(int argc, char * argv[])
+{
+	FILE *fa, *fs;
+	int files = 0;
+	if (argc < 2)
+		printf("Usage:%s filename[s]\n", argv[0]);
+	if ((fa = fopen(argv[1], "a")) == NULL)
+	{
+		fprintf(stderr, "Can't open %s\n", argv[2]);
+		exit(EXIT_FAILURE);
+	}
+	if (setvbuf(fa, NULL, _IOFBF, BUFSIZE) != 0)
+	{
+		fputs("Can't create output buffer\n", stderr);
+		exit(EXIT_FAILURE);
+	}
+	if (strcmp(argv[1], argv[2]) == 0)
+		fputs("Can't append file to itself\n", stderr);
+	else if ((fs = fopen(argv[2], "r")) == NULL)
+		fprintf(stderr, "Can't open %s\n", argv[2]);
+	else
+	{
+		if (setvbuf(fs, NULL, _IOFBF, BUFSIZE) != 0)
+		{
+			fputs("Can't creat input buffer\n", stderr);
+			exit(EXIT_FAILURE);
+		}
+		append(fs,fa);
+		if (ferror(fs) != 0)
+			fprintf(stderr, "Error in reading file %s.\n", argv[1]);
+		if (ferror(fa) != 0)
+			fprintf(stderr, "Error in writing file %s.\n", argv[2]);
+		fclose(fs);
+		printf("File %s appended.\n", argv[2]);
+	}
+	printf("Done.\n");
+	fclose(fa);
+	return 0;
+}
+void append(FILE *source, FILE *dest)
+{
+	size_t bytes;
+	static char temp[BUFSIZE];
+	while ((bytes = fread(temp, sizeof(char), BUFSIZE, source)) > 0)
+		fwrite(temp, sizeof(char), bytes, dest);
+}
+6.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define LEN 40
+int main(void)
+{
+	FILE *in, *out;
+	char ch;
+	char name[LEN];
+	int count = 0;
+	puts("Please input the file name:");
+	scanf("%s", name);
+	if ((in = fopen(name, "r")) == NULL)
+	{
+		fprintf(stderr, "I couldn't open the file \"%s\"\n", name);
+		exit(EXIT_FAILURE);
+	}
+	strcat(name, ".txt");
+	if ((out = fopen(name, "w")) == NULL)
+	{
+		fprintf(stderr, "Can't creat output file.\n");
+		exit(EXIT_FAILURE);
+	}
+	while ((ch = getc(in)) != EOF)
+	{
+		putchar(ch);
+		if (count++ % 3 == 0)
+		putc(ch, out);
+	}
+	if (fclose(in) != 0 || fclose(out) != 0)
+		fprintf(stderr, "Error in closing files\n");
+	return 0;
+}
+7.
+#include<stdio.h>
+#include<stdlib.h>
+int main(int argc, char *argv[])
+{
+	int ch1, ch2;
+	FILE *fp1, *fp2;
+	if (argc != 3)
+		printf("Usage %s file1 file2", argv[0]);
+	if ((fp1 = fopen(argv[1], "r")) == NULL)
+	{
+		printf("Couldn't open file %s for read\n", argv[1]);
+		exit(EXIT_FAILURE);
+	}
+	if ((fp2 = fopen(argv[2], "r")) == NULL)
+	{
+		printf("Couldn't open file %s for read\n", argv[2]);
+		exit(EXIT_FAILURE);
+	}
+	while ((ch1 = getc(fp1) != EOF || (ch2 = getc(fp2)) != EOF))
+	{
+		if (ch1 != EOF)
+		{
+			if(ch1 != '\n')
+				do
+				{
+					putchar(ch1);
+				} while ((ch1 = getc(fp1)) != '\n' && ch1 != EOF);// ch1== '\n'
+				putchar('\t');
+			if (ch2 != EOF)
+			{
+				do
+					putchar(ch2);
+				while ((ch2 = getc(fp2)) != '\n' && ch2 != EOF);// ch2=='\n'
+				putchar('\n');
+			}
+			else
+				putchar('\n');
+		}
+		else if (ch1 == EOF && ch2 != EOF)
+		{
+			do
+				putchar(ch2);
+			while ((ch2 = getc(fp2)) != '\n' && ch2 != EOF); // ch2=='\n'
+			putchar('\n');
+		}
+	}
+	if (fclose(fp1) != 0)
+		printf("Couldn't close %s\n", argv[1]);
+	if (fclose(fp2) != 0)
+		printf("Couldn't close %s\n", argv[2]);
+	return 0;
+}
+8.
+#include<stdio.h>
+#include<stdlib.h>
+int count(char ch, FILE *fp);
+int main(int argc, char *argv[])
+{
+	int i;
+	char ch;
+	FILE *fp, *fp2;
+	if (argc < 2)
+		printf("Usage %s filename[s]", argv[0]);
+	else if (argc == 2)
+	{
+		puts("Input your words(Ctrl + Z to quit)");
+		if ((fp2 = fopen(argv[1], "w+")) == NULL)
+		{
+			fprintf(stderr, "Couldn't open file %s.\n", argv[1]);
+			exit(EXIT_FAILURE);
+		}
+		while ((ch = getchar()) != EOF)
+			fprintf(fp2, "%c",ch);
+		fseek(fp2, 0L, SEEK_SET);
+		printf("In your input, %c has been used %d times.\n", argv[1][0], count(argv[1][0], fp2));
+		if (fclose(fp2) != 0)
+		{
+			printf("Couldn't close file %s", argv[1]);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+		for (i = 2;i < argc;i++)
+		{
+			if ((fp = fopen(argv[i], "r")) == NULL)
+			{
+				fprintf(stderr, "Couldn't open file %s.\n", argv[i]);
+				continue;
+			}
+			printf("%c has been used %d times in %s.\n", argv[1][0], count(argv[1][0], fp), argv[i]);
+			if (fclose(fp) != 0)
+			{
+				printf("Couldn't close file %s", argv[i]);
+				exit(EXIT_FAILURE);
+			}
+		}
+	
+	return 0;
+}
+int count(char ch, FILE *fp)
+{
+	int n = 0;
+	char ch2;
+	while ((ch2 = getc(fp)) != EOF)
+		if (ch2 == ch)
+		n++;
+	return n;
+}
+9.
+一样
+10.
+#include<stdio.h>
+#include<stdlib.h>
+int main(void)
+{
+	char name[40], ch;
+	long num;
+	FILE *fp;
+	puts("Please input a file's name:");
+	scanf("%s", name);
+	if ((fp = fopen(name, "r")) == NULL)
+		printf("Couldn't open file %s\n", name);
+	puts("Please input alocation(not number to qiut):");
+	while (scanf("%ld", &num) == 1)
+	{
+		if (fseek(fp, num, SEEK_SET) == -1)
+		{
+			printf("out of range,try again.\n");
+			continue;
+		}
+		else
+			while ((ch = fgetc(fp)) != EOF && ch != '\n')
+			putchar(ch);
+		putchar('\n');
+	}
+	return 0;
+}
+11.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define LEN 100
+int main(int argc, char * argv[])
+{
+	FILE *fp;
+	char line[LEN];
+	if (argc != 3)
+	{
+		fprintf(stderr, "Usage %s filename[%s]", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+	if ((fp = fopen(argv[2], "r")) == NULL)
+	{
+		fprintf(stderr, "Couldn't open file %s", argv[2]);
+		exit(EXIT_FAILURE);
+	}
+	while (fgets(line, LEN - 1, fp) != NULL)
+	{
+		if (strstr(line, argv[1]) != NULL)
+			fputs(line, stdout);
+	}
+	if (fclose(fp) != 0)
+		printf("Error in closing file %s\n", argv[2]);
+	return 0;
+
+}
+12.
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+int main(void)
+{
+	int array[20][31], i, j;
+	char a[11] = { ' ','.','#','$','%','^','&','*','!','@' };
+	srand((unsigned int)time(0));
+	for (i = 0;i < 20;i++)
+		for (j = 0;j < 30;j++)
+		array[i][j] = rand() % 10;
+	for (i = 0;i < 20;i++)
+		for (j = 0;j < 30;j++)
+		{
+			fprintf(stdout, "%d ", array[i][j]);
+			if ((j + 1) % 30 == 0)
+				putchar('\n');
+		}
+	for (i = 0;i < 20;i++)
+		for (j = 0;j < 30;j++)
+		{
+			switch (array[i][j])
+			{
+			case 0:array[i][j] = a[0];
+				break;
+			case 1:array[i][j] = a[1];
+				break;
+			case 2:array[i][j] = a[2];
+				break;
+			case 3:array[i][j] = a[3];
+				break;
+			case 4:array[i][j] = a[4];
+				break;
+			case 5:array[i][j] = a[5];
+				break;
+			case 6:array[i][j] = a[6];
+				break;
+			case 7:array[i][j] = a[7];
+				break;
+			case 8:array[i][j] = a[8];
+				break;
+			case 9:array[i][j] = a[9];
+				break;
+			default:break;
+			}
+		}
+	for (i = 0;i < 20;i++)
+		for (j = 0;j < 30;j++)
+		{
+			fprintf(stdout, "%c ", array[i][j]);
+			if ((j + 1) % 30 == 0)
+				putchar('\n');
+		}
+	return 0;
+}
+
+13.
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<stdbool.h>
+bool min(int i, int j);
+int main(void)
+{
+	int array[20][31], i, j;
+	char a[11] = { ' ','.','#','$','%','^','&','*','!','@' };
+	srand((unsigned int)time(0));
+	for (i = 0;i < 20;i++)
+		for (j = 0;j < 30;j++)
+		array[i][j] = rand() % 10;
+	for (i = 0;i < 20;i++)
+		for (j = 0;j < 30;j++)
+		{
+			fprintf(stdout, "%d ", array[i][j]);
+			if ((j + 1) % 30 == 0)
+				putchar('\n');
+		}
+	for (i = 0;i < 20;i++)
+		for (j = 0;j < 30;j++)
+		{
+			if (i == 0 && j != 0 && j != 29)
+			{
+				if (min(array[i][j], array[i][j - 1]) && min(array[i][j], array[i][j + 1]) && min(array[i][j], array[i + 1][j]))
+					array[i][j] = (array[i][j - 1] + array[i][j + 1] + array[i + 1][j]) / 3;
+			}
+			else if (i == 0 && (j == 29 || j == 0))
+			{
+				if (j == 0)
+					if (min(array[i][j], array[i][j + 1]) && min(array[i][j], array[i + 1][j]))
+					array[i][j] = (array[i][j + 1] + array[i + 1][j]) / 2;
+					else if (min(array[i][j], array[i][j - 1]) && min(array[i][j], array[i + 1][j]))
+						array[i][j] = (array[i][j - 1] + array[i + 1][j]) / 2;
+			}
+			else if (i == 19 && j != 0 && j != 29)
+			{
+				if (min(array[i][j], array[i][j - 1]) && min(array[i][j], array[i][j + 1]) && min(array[i][j], array[i - 1][j]))
+					array[i][j] = (array[i][j - 1] + array[i][j + 1] + array[i - 1][j]) / 3;
+			}
+			else if (i == 19 && (j == 29 || j == 0))
+			{
+				if (j == 0)
+					if (min(array[i][j], array[i][j + 1]) && min(array[i][j], array[i - 1][j]))
+					array[i][j] = (array[i][j + 1] + array[i - 1][j]) / 2;
+					else if (min(array[i][j], array[i][j - 1]) && min(array[i][j], array[i - 1][j]))
+						array[i][j] = (array[i][j - 1] + array[i - 1][j]) / 2;
+			}
+			else if (i != 0 && i != 19 && j != 0 && j != 29)
+			{
+				if (min(array[i][j], array[i][j - 1]) && min(array[i][j], array[i][j + 1]) && min(array[i][j], array[i + 1][j]) && min(array[i][j], array[i - 1][j]))
+					array[i][j] = (array[i][j - 1] + array[i][j + 1] + array[i + 1][j] + array[i - 1][j]) / 4;
+			}
+		}
+	putchar('\n');
+	for (i = 0;i < 20;i++)
+		for (j = 0;j < 30;j++)
+		{
+			fprintf(stdout, "%d ", array[i][j]);
+			if ((j + 1) % 30 == 0)
+				putchar('\n');
+		}
+	putchar('\n');
+	for (i = 0;i < 20;i++)
+		for (j = 0;j < 30;j++)
+		{
+			switch (array[i][j])
+			{
+			case 0:array[i][j] = a[0];
+				break;
+			case 1:array[i][j] = a[1];
+				break;
+			case 2:array[i][j] = a[2];
+				break;
+			case 3:array[i][j] = a[3];
+				break;
+			case 4:array[i][j] = a[4];
+				break;
+			case 5:array[i][j] = a[5];
+				break;
+			case 6:array[i][j] = a[6];
+				break;
+			case 7:array[i][j] = a[7];
+				break;
+			case 8:array[i][j] = a[8];
+				break;
+			case 9:array[i][j] = a[9];
+				break;
+			default:break;
+			}
+		}
+	for (i = 0;i < 20;i++)
+		for (j = 0;j < 30;j++)
+		{
+			fprintf(stdout, "%c ", array[i][j]);
+			if ((j + 1) % 30 == 0)
+				putchar('\n');
+		}
+	return 0;
+}
+bool min(int i, int j)
+{
+	if (i - j > 1)
+		return true;
+	else if (j - i > 1)
+		return true;
+	else
+		return false;
+}

@@ -1,0 +1,249 @@
+#include<stdio.h>
+double min(double x, double y);
+int main(void)
+{
+	float x, y;
+	printf("Please enter two float:\n");
+	scanf("%f%f",&x,&y);
+	printf("The smaller one is %.2f\n", min(x, y));
+	return 0;
+}
+double min(double x, double y)
+{
+	if (x < y)
+		return x;
+	else
+		return y;
+}
+2.
+#include<stdio.h>
+void chline(char ch, int i, int j);
+int main(void)
+{
+	char ch;
+	int i, j;
+	printf("Enter a char and two int\n");
+	scanf("%c", &ch);
+	scanf("%d%d", &i, &j);
+	chline(ch, i, j);
+	return 0;
+}
+void chline(char ch, int i, int j)
+{
+	int k;
+	for (k = 1;k < i;k++)
+		printf(" \n");
+	for (;i <= j;i++)
+		printf("%c\n",ch);
+}
+3.
+#include<stdio.h>
+void chline(char ch, int i, int j);
+int main(void)
+{
+	char ch;
+	int i, j;
+	printf("Enter a char and two int\n");
+	scanf("%c", &ch);
+	scanf("%d%d", &i, &j);
+	chline(ch, i, j);
+	return 0;
+}
+void chline(char ch, int i, int j)
+{
+	int k, n;
+	for (k = 1;k <= j;k++)
+	{
+		for (n = 1;n <= i;n++)
+		printf("%c", ch);
+		printf("\n");
+	}
+}
+4.
+#include<stdio.h>
+float xie(float n, float m);
+int main(void)
+{
+	float n, m;
+	printf("Please enter two number:\n");
+	scanf("%f%f", &n, &m);
+	printf("The xie is %.2f", xie(n, m));
+	return 0;
+}
+float xie(float n, float m)
+{
+	return 1 / ((1 / n + 1 / m) / 2);
+}
+5.
+#include<stdio.h>
+void larger_of(double * x, double * y);
+int main(void)
+{
+	double a, b;
+	printf("Please enter two number:\n");
+	scanf("%lf%lf", &a, &b);
+	printf("Before x is %.2lf y is %.2lf and now x is ", a, b);
+	larger_of(&a, &b);
+	printf("%.2lf and y is %.2lf", a, b);
+	return 0;
+}
+void larger_of(double * x, double * y)
+{
+	double temp = *x;
+	if (*y > *x)
+	{
+		*x = *y;
+		*y = temp;
+	}
+}
+6.
+#include<stdio.h>
+#include<ctype.h>
+int ABC(char ch);
+int main(void)
+{
+	char ch;
+	printf("Please enter your characters:\n");
+	while ((ch = getchar()) != EOF)
+		ABC(ch);
+	return 0;
+}
+int ABC(char ch)
+{
+	int a;
+	if (isalpha(ch))
+		a = tolower(ch) - 'a' + 1;
+	else
+		a = -1;
+	printf("the position of the character is %d\n", a);
+	return a;
+}
+7.
+#include<stdio.h>
+double power(double a, double b);
+int main(void)
+{
+	double a, b;
+	printf("Please enter two double:\n");
+	while(scanf("%lf%lf", &a, &b)==2)
+		printf("a ^ b is %.4lf", power(a, b));
+	return 0;
+}
+double power(double a, double b)
+{
+	float flo = 1;
+	int i;
+	if (b == 0)
+		return 1;
+	else if (a == 0)
+		return 0;
+	else if (b > 0)
+	{
+		for (i = 1;i <= b;i++)
+			flo *= a;
+		return flo;
+	}
+	else if (b < 0)
+	{
+		for (i = 1;i <= b;i++)
+			a *= a;
+		return 1 / a;
+	}
+
+
+}
+8.
+#include<stdio.h>
+double power(double a, double b);
+int main(void)
+{
+	double a, b;
+	printf("Please enter two double:\n");
+	while (scanf("%lf%lf", &a, &b) == 2)
+		printf("a ^ b is %.4lf", power(a, b));
+	return 0;
+}
+double power(double a, double b)
+{
+	float flo = 1;
+	int i;
+	if (b == 0)
+		return 1;
+	else if (a == 0)
+		return 0;
+	else if (b > 0)
+	{
+		for (i = 1;i <= b;i++)
+			flo *= a;
+		return flo;
+	}
+	else if (b < 0)
+	{
+		return 1 / power(a,-b);
+	}
+
+
+}
+9.
+#include<stdio.h>
+void to_base_n(unsigned long number, int m);
+int main(void)
+{
+	unsigned long number;
+	int m;
+	printf("Enter two inter(q to qiut)\n");
+	while (scanf("%ul", &number) == 1)
+	{
+		scanf("%d", &m);
+		printf("The %lu 's %d 进制 is\n", number, m);
+		to_base_n(number, m);
+		putchar('\n');
+		printf("Enter two inter(q to qiut)\n");
+	}
+	printf("The %lu 's %d 进制 is\n", number, m);
+	printf("Done.\n");
+	return 0;
+}
+void to_base_n(unsigned long number, int m)
+{
+	int r;
+	r = number%m;
+	if (number >= m)
+		to_base_n(number / m, m);
+	putchar('0' + r);
+	return;
+}
+10.
+#include<stdio.h>
+unsigned long long Fibonacci(int n);
+int main(void)
+{
+	int n, m;
+	printf("Please enter a Fibonacci limit:\n");
+	
+	while (scanf("%d", &n) == 1)
+	{
+		
+		for (m = 1; m <= n;m++)
+		{
+			if (m % 10 == 0)
+			{
+				printf("%llu\t", Fibonacci(m));
+				putchar('\n');
+			}
+			else
+			printf("%llu\t", Fibonacci(m));
+		}
+		
+			
+		putchar('\n');
+	}
+	return 0;
+}
+unsigned long long Fibonacci(int n)
+{
+	if (n > 2)
+		return Fibonacci(n - 2) + Fibonacci(n - 1);
+	else
+		return 1;
+}

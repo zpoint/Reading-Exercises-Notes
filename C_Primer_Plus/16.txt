@@ -1,0 +1,183 @@
+2.
+#include<stdio.h>
+#define AVERAGE(X,Y) 1/((1.0/(X)) + (1.0/(Y)))
+int main(void)
+{
+	int i, j;
+	scanf("%d%d", &i, &j);
+	printf("The 调和平均数 of %d and %d is %g\n", i, j, AVERAGE(i,j));
+	return 0;
+}
+3.
+#include<stdio.h>
+#include<math.h>
+#define PI atan(1)*4
+struct v {
+	double x;
+	double y;
+};
+void ptor(struct v * polar,struct v * rectangular);
+int main(void)
+{
+	struct v polar, rectangular;
+	printf("Please input the magnitude and angle(in degrees),input q to quit:\n");
+	while (scanf("%lf%lf", &polar.x, &polar.y) == 2)
+	{
+		ptor(&polar, &rectangular);
+		printf("x = %g, y = %g\n", rectangular.x, rectangular.y);
+		printf("Please input the magnitude and angle(in degrees),input q to quit:\n");
+	}
+	return 0;
+}
+void ptor(struct v * polar, struct v * rectangular)
+{
+	rectangular->x = polar->x * cos(polar->y * PI / 180);
+	rectangular->y = polar->x * sin(polar->y * PI / 180);
+}
+4.
+#include<stdio.h>
+#include<time.h>
+int main(void)
+{
+	int sec;
+	double origin;
+	printf("Input a time(in second) to delay:(q to quit)\n");
+	while (scanf("%d", &sec) == 1)
+	{
+		origin = clock() / CLOCKS_PER_SEC;
+		while (clock() / CLOCKS_PER_SEC < origin + (double)sec);
+		printf("time is out\n");
+		printf("Input a time(in second) to delay:(q to quit)\n");
+	}
+	return 0;
+}
+5.
+#include<stdio.h>
+#include<time.h>
+#include<stdlib.h>
+#include<stdbool.h>
+#define SIZE 10
+void Rd(int *num, int size, int count);
+int main(void)
+{
+	int num[SIZE], count;
+	srand(time(0));
+	for (count = 0;count < SIZE;count++)
+	{
+		num[count] = count + 1;
+		printf("%d\t", num[count]);
+	}
+	putchar('\n');
+	puts("Please input the times you want(q to quit):");
+	while (scanf("%d", &count) == 1)
+		Rd(num, SIZE, count);
+	return 0;
+}
+void Rd(int *num, int size, int count)
+{
+	int i, j, *p;
+	bool repeat = true;
+	p = (int *)malloc(sizeof(int) * count);
+	for (i = 0;i < count;i++)
+	{
+		p[i] = num[rand() % SIZE];
+		if (repeat)
+		{
+			for (j = 0;j < i;j++)
+				if (p[j] == p[i])
+					break;
+			if (j == i && p[i-1] != p[i])
+				repeat = false;
+			if (repeat && i!= 0)
+				i--;
+		}
+		repeat = true;
+	}
+	for (j = 0;j < count;j++)
+		printf("%d\t", p[j]);
+	putchar('\n');
+
+}
+6.
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define NUM 5
+struct names {
+	char first[10];
+	char last[10];
+};
+int mycomp(const void *p1, const void * p2);
+void show_name(struct names *name);
+int main(void)
+{
+	struct names name[NUM] = {
+		{"James","Harden"},{"Dy","Hward"},{"Guo","Zpoint"},{"Zebo","Guan"},{"Zizhao","fang"},
+	};
+	puts("Random list");
+	show_name(name);
+	qsort(name, NUM, sizeof(struct names), mycomp);
+	puts("\nSorted list:");
+	show_name(name);
+	return 0;
+}
+void show_name(struct names *name)
+{
+	int i;
+	for (i = 0;i < NUM;i++)
+	printf("name:%d,%s,%s\n",i,(name+i)->first ,(name+i)->last);
+}
+int mycomp(const void *p1, const void * p2)
+{
+	const struct names*a1 = (const struct names *)p1;
+	const struct names *a2 = (const struct names *)p2;
+	if ((*a1).first[0] < (*a2).first[0])
+		return -1;
+	else if ((*a1).first[0] == (*a2).first[0])
+	{
+		if ((*a1).last[0] < (*a1).last[0])
+			return -1;
+		else if ((*a1).last[0] == (*a2).last[0])
+			return 0;
+		else
+			return 1;
+	}
+	else
+		return 1;
+}
+7.
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdarg.h>
+void show_array(const double ar[], int n);
+double * new_d_array(int n, ...);
+int main(void)
+{
+	double *p1;
+	double *p2;
+	p1 = new_d_array(5, 1.2, 2.3, 3.4, 4.5, 5.6);
+	p2 = new_d_array(4, 100.0, 20.00, 8.08, -1890.0);
+	show_array(p1, 5);
+	show_array(p2, 4);
+	free(p1);
+	free(p2);
+	return 0;
+}
+void show_array(const double ar[], int n)
+{
+	int i;
+	for (i = 0;i < n;i++)
+		printf("%g\t", ar[i]);
+	putchar('\n');
+}
+double * new_d_array(int n, ...)
+{
+	va_list ap;
+	int i;
+	double *p = (double *)malloc(n*sizeof(double));
+	va_start(ap, n);
+	for (i = 0;i < n;i++)
+		*(p + i) = va_arg(ap, double);
+	va_end(ap);
+	return p;
+}

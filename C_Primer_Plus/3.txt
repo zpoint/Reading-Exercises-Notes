@@ -1,0 +1,60 @@
+#include<stdio.h>
+int main(void)
+{
+	int ascii;
+	printf("Enter an ascii code:");
+	scanf("%d", &ascii);
+	printf("%d is the ASCII code for %c\n", ascii,ascii);
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	printf("\aStartled by the sudden sound,Sally shouted,\"By the Great Pumpkin, what was that!\"\n");
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	float num;
+	printf("\aPlease enter your float number:");
+	scanf("%f", &num);
+	printf("The input is %f or %e\n",num,num);
+	return 0;
+}
+
+#include<stdio.h>
+int main(void)
+{
+	float age;
+	printf("Please enter your age:");
+	scanf("%f", &age);
+	printf("U lived %lld seconds\n", age*3.156e7);
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	int m_tk;
+	printf("Please enter tk:");
+	scanf("%f", &m_tk);
+	printf("There are %e Ë®·Ö×Ó in total", m_tk * 950 / 3.0e-23);
+	return 0;
+}
+
+
+#include<stdio.h>
+int main(void)
+{
+	float height;
+	printf("Please enter your height in inch:");
+	scanf("%f", &height);
+	printf("Your height is %f inch and %f cm", height, height*2.54);
+	return 0;
+}

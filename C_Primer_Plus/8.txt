@@ -1,0 +1,226 @@
+1.
+#include<stdio.h>
+int main(void)
+{
+	char ch;
+	int count = 0;
+	while ((ch = getchar()) != EOF)
+		count += 1;
+	printf("You input %d characters in total\n", count);
+	return 0;
+}
+2.
+#include<stdio.h>
+int main(void)
+{
+	int count;
+	char ch;
+	for (count = 1;(ch = getchar())!=EOF;count++)
+	{
+		if (ch >= ' ' || ch == '\n' || ch == '\t')
+			printf("%-5c", ch);
+		else
+			printf("^%-4c", ch+64);
+		printf("%-5d", ch);
+		if (count % 10 == 0)
+			printf("\n");
+	}
+	return 0;
+}
+
+3
+#include<stdio.h>
+#include<ctype.h>
+int main(void)
+{
+	int up = 0, low = 0;
+	char ch;
+	while ((ch = getchar()) != EOF)
+	{
+		if (isupper(ch))
+			up++;
+		else if (islower(ch))
+			low++;
+	}
+	printf("You input %d upper and %d lower in total", up, low);
+	return 0;
+}
+4.
+#include<stdio.h>
+#include<ctype.h>
+#include<stdbool.h>
+int main(void)
+{
+	char ch;
+	int words = 0, n_words = 0;
+	bool inwords = false;
+	float average;
+	while ((ch = getchar()) != EOF)
+	{
+		if (!ispunct(ch)||!isspace(ch))
+			words++;
+		if (!isspace(ch) && !inwords)
+		{
+			inwords = true;
+			n_words++;
+		}
+		if (isspace(ch) && inwords)
+			inwords = false;
+	}
+	printf("You enter %d words and %d characters and about %.2f charaters per words\n", n_words,words,(float)words/(float)n_words);
+	return 0;
+}
+5.
+#include<stdio.h>
+int main(void)
+{
+	int high=100,low=1,guess= (high + low) / 2;
+	char response;
+	printf("Pick an inter from 1 to 100.I will try to guess it.\n");
+	printf("Respond with a y if my guess is right and with b if my guess is biggeer and with s if smaller\n");
+	printf("Uh....is your number %d?\n", guess);
+	while ((response = getchar()) != 'y')
+	{
+		if (response=='\n')
+			continue;
+		while (getchar() != '\n')
+			continue;
+		if (response == 'b')
+			high = guess;
+		else if (response == 's')
+		low =guess;
+		else
+			printf("Sorry, I understand only 'y','b'or's'\n");
+		guess = (high + low) / 2;
+		printf("Well then,is it %d\n", guess);
+		
+	}
+	printf("I knew I could do it");
+	return 0;
+}
+6.
+#include<stdio.h>
+#include<ctype.h>
+int main(void)
+{
+	int ch;
+	while ((ch = getchar()) != '\n')
+	{
+		if (isspace(ch))
+			continue;
+		else
+		{
+			putchar(ch);
+			while (getchar() != '\n')
+				continue;
+		}
+	}
+	return 0;
+}
+7.
+#include<stdio.h>
+#define OT 1.5
+#define RATE1 0.15
+#define RATE2 0.2
+#define RATE3 0.25
+#define RATE11 45
+#define LIMIT1 300
+#define LIMIT2 150
+#define RATE21 30
+#define TIME 40
+int main(void)
+{
+	char ch;
+	int choice;
+	double hours = 0, rate, get, gross, BASIC;
+	printf("****************************************************************\n");
+	printf("Enter the number corrsponding to the desired pay rate or action:\n");
+	printf("a)$8.75/hr\t\t");
+	printf("b)$9.33/hr\t\t\n");
+	printf("c)$10.00/hr\t\t");
+	printf("d)$11.20/hr\t\t\n");
+	printf("e)quit\n");
+	printf("****************************************************************\n");
+	while ((ch=getchar())!='\n')
+	{
+		if (ch >= 'a' && ch <= 'e')
+		{
+			switch (ch)
+			{
+			case 'a':BASIC = 8.75;
+				break;
+			case 'b':BASIC = 9.33;
+				break;
+			case 'c':BASIC = 10.00;
+				break;
+			case 'd':BASIC = 11.20;
+				break;
+			case 'e':printf("quit");
+				return 0;
+			}
+			break;
+		}
+		else
+			printf("Please enter a-e\n");
+	}
+	printf("Please input your work hours per week:\n");
+	scanf("%lf", &hours);
+	if (hours > TIME)
+		hours = TIME + (hours - TIME)*OT;
+	gross = hours*BASIC;
+	if (gross <= LIMIT1)
+		rate = RATE1*gross;
+	else if (gross <= (LIMIT1 + LIMIT2))
+		rate = RATE11 + (gross - LIMIT1)*RATE2;
+	else
+		rate = RATE11 + RATE21 + (gross - LIMIT1 - LIMIT2)*RATE3;
+	get = gross - rate;
+	printf("Your salary in total is %.2f,your rate is %.2f,your net income is %.2f\n", gross, rate, get);
+	return 0;
+}
+8.
+#include<stdio.h>
+int main(void)
+{
+	char choice;
+	float first, second;
+	printf("Enter the operation of your choice:\n");
+	printf("a.add\t\ts.subtract\n");
+	printf("m.multiply\td.divide\nq.quit\n");
+	while ((choice = getchar()) != 'q')
+	{
+		if (choice == '\n')
+			continue;
+		while (getchar() != '\n')
+			continue;
+		printf("Enter first number:\n");
+		while(scanf("%f", &first) != 1)
+			printf("Please enter a number,such as 2.5, -1.78E8, or 3:\n");
+		printf("Enter second number:\n");
+		while (scanf("%f", &second) != 1 || (second == 0 && choice == 'd'))
+		{
+			if (choice == 'd'&&second == 0)
+				printf("Enter a number other than 0:\n");
+			else
+				printf("Please enter a number,such as 2.5, -1.78E8, or 3:\n");
+		}
+		switch (choice)
+		{
+		case 'a':printf("%.2f + %.2f = %.2f\n", first, second, first + second);
+			break;
+		case 's':printf("%.2f - %.2f = %.2f\n", first, second, first - second);
+			break;
+		case 'm':printf("%.2f * %.2f = %.2f\n", first, second, first * second);
+			break;
+		case 'd':printf("%.2f / %.2f = %.2f\n", first, second, first / second);
+			break;
+		default:printf("input valid\n");
+			break;
+		}
+		printf("Enter the operation of your choice:\n");
+		printf("a.add\t\ts.subtract\n");
+		printf("m.multiply\td.divide\nq.quit\n");
+	}
+	return 0;
+
+}
