@@ -1,8 +1,8 @@
 ####A tower defense game
 
-![image](https://github.com/zpoint/Games/blob/master/tower_defense/screenshots/1.png)
+![image](https://github.com/zpoint/Reading-Exercises-Notes/blob/master/tower_defense/screenshots/1.png)
 
-![image](https://github.com/zpoint/Games/blob/master/tower_defense/screenshots/2.png)
+![image](https://github.com/zpoint/Reading-Exercises-Notes/blob/master/tower_defense/screenshots/2.png)
 
 ####hint
 - - -
