@@ -1,0 +1,86 @@
+#lang scheme
+(define (bigger x y z)
+  (cond ((and (< x y) (< x z)) (+ y z))
+        ((and (< y x) (< y z)) (+ x z))
+        (else (+ x y)))
+  )
+
+(define (new-if predicate then-clause else-clause)
+  (cond (predicate then-clause)
+        (else else-clause)))
+
+(define (good_enough? guess x)
+  (< (abs(- (square guess) x)) 0.001))
+
+(define (square x) (* x x))
+
+(define (improve guess x)
+  (average guess (/ x guess))
+  )
+
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (sqrt_iter guess x)
+  (if (good_enough? guess x) guess
+      (sqrt_iter (improve guess x) x)
+      ))
+
+(define (sqrt_m x)
+  (sqrt_iter 1.0 x))
+
+(define (sqrt_m2 x)
+  (define (good_enough? guess x)
+    (< (abs (- (square guess) x)) 0.001))
+    (define (average a b)
+    (/ (+ a b) 2))
+  (define (improve guess x)
+    (average guess (/ x guess)))
+  (define (sqrt_iter guess x)
+    (if (good_enough? guess x)
+    guess (sqrt_iter (improve guess x) x)))
+  (sqrt_iter 1.0 x)
+  )
+
+(define (sqrt_m3 x)
+  (define(good_enough? guess)
+    (< (abs (- (square guess) x)) 0.001))
+  (define (average x y)
+    (/ (+ x y) 2))
+  (define (improve guess)
+    (average guess (/ x guess)))
+  (define (sqrt_iter guess)
+    (if (good_enough? guess)
+       guess (sqrt_iter (improve guess))))
+    (sqrt_iter 1.0)
+  )
+
+(define (A x y)
+  (cond ((= y 0) 0)
+        ((= x 0) (* 2 y))
+        ((= y 1) 2)
+        (else (A (- x 1) (A x (- y 1))))
+        )
+  )
+
+(define (f n)
+  (if (< n 3) n
+      (+ (f (- n 1)) (* 2 (f (- n 2))) (* 3 (f (- n 3))) ))
+  )
+
+(define (f_improve n)
+  if()
+  )
+
+(define (timed-prime-test n)
+  (define (start-prime-test n start-time)
+    (if (prime? n)
+        (report-prime (- (runtime) start-time))
+        (display "Not a prime!")))
+  (define (report-prime elapsed-time)
+    (display " *** ")
+    (display elapsed-time))
+  (newline)
+  (display n)
+  (start-prime-test n (runtime))
+  )

@@ -1,0 +1,2 @@
+cd /usr/include
+time -p grep_POSIX-SOURCE */*.h > /dev/null
