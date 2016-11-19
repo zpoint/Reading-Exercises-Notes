@@ -1,0 +1,1 @@
+int max = std::numeric_limits<std::streamsize>::max();
