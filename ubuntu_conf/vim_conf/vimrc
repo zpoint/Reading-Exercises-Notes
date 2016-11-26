@@ -71,7 +71,7 @@ filetype plugin indent on    " required
 "Jedi for Python), and it needs some C libraries to be installed for it to work correctly. The docs have very good installation instructions so I won’t repeat them here, but be sure you follow them.
 "
 let g:ycm_autoclose_preview_window_after_completion=1
-let g:ycm_global_ycm_extra_conf = '/home/mimic/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '/home/zpoint/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 "The former line ensures that the autocomplete window goes away when you’re
 "done with it, and the latter defines a shortcut for goto definition.
@@ -106,6 +106,10 @@ set t_Co=256
 let g:Powerline_symbols = 'fancy'
 let Powerline_symbols='compatible'
 
+ " NERDTree config
+ map <F2> :NERDTreeToggle<CR>
+ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif
+
 "syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -118,7 +122,9 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers=['pylint']
 let g:syntastic_python_pylint_args='--disable=C0111,R0903,C0301'
 let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
-
+"C++
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
 set nu
 set clipboard=unnamed
 set hlsearch
