@@ -1,0 +1,3 @@
+/*
+ * Must be same type
+ */
