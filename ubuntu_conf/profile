@@ -29,9 +29,5 @@ fi
 export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_112
 export JRE_HOME=${JAVA_HOME}/jre
 export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
-export PATH=${JAVA_HOME}/bin:$PATH
-export PATH=/opt/genymobile/genymotion
-export PATH=/usr/bin/:$PATH
-export PATH=/sbin/:$PATH
-export PATH=/bin/:$PATH
-export PATH=/usr/local/bin/:$PATH
+export PATH=$PATH:${JAVA_HOME}/bin
+export PATH=$PATH:/home/zpoint/Documents/pypy3-v5.5.0-linux64/bin
