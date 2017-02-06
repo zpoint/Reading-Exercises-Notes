@@ -1,0 +1,3 @@
+/*
+ * check strblob.h
+ */
