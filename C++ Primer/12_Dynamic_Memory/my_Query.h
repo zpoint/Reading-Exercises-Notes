@@ -5,6 +5,8 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <utility>
+#include <algorithm>
 #define BREAK_LINE "\r\n"
 class QueryResult;
 
@@ -25,8 +27,14 @@ class QueryResult
 				{
 						if ((*line_map).size())
 						{
+								std::vector<std::pair<std::string, std::size_t>> vec_pair;
 								for (const auto &pair : (*line_map))
-										cout << "(line " << pair.second << ") " << pair.first << BREAK_LINE;
+										vec_pair.push_back(pair);
+								
+								std::sort(vec_pair.begin(), vec_pair.end(),
+											[](std::pair<std::string, std::size_t> pair1, std::pair<std::string, std::size_t> pair2) { return pair1.second < pair2.second; });
+								for (const auto &pair : vec_pair)
+										cout << "(line " << pair.second << ") " << pair.first << BREAK_LINE << BREAK_LINE;
 						}
 						else
 								cout << "No result !!!" << BREAK_LINE;
@@ -39,23 +47,23 @@ class QueryResult
 TextQuery::TextQuery(std::ifstream &infile)
 {
 		std::string buffer;
-		while (infile >> buffer)
+		while (std::getline(infile, buffer))
 				str_vec.push_back(buffer);
 }
 
 QueryResult TextQuery::query(const std::string query)
 {
 		line_map = std::make_shared<std::map<std::string, std::size_t>>();
-		std::size_t size_of_lines = str_vec.size(), query_size = query.size();
+		std::size_t size_of_lines = str_vec.size();
 		for (std::size_t index = 0; index < size_of_lines; ++index)
 		{
 				std::string buffer = str_vec[index];
-				std::size_t pos = std::string::npos, freq = 0;
+				std::size_t pos = buffer.find(query);
 				// find frequency
+				/*
 				do
 				{
-						std::cout << buffer << BREAK_LINE;
-						pos = buffer.find_first_of(query);
+						pos = buffer.find(query);
 						if (pos != std::string::npos)
 						{
 								buffer = buffer.substr(pos + query_size);
@@ -63,8 +71,10 @@ QueryResult TextQuery::query(const std::string query)
 						}
 				}
 				while (pos != std::string::npos);
-				if (freq)
-						(*line_map)[buffer] = freq;
+				*/
+
+				if (pos != std::string::npos)
+						(*line_map)[buffer] = index + 1; // can store freq too
 		}
 		return QueryResult(line_map);
 }
