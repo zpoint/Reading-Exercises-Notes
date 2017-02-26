@@ -9,7 +9,7 @@ class numbered {
 				int mysn;
 };
 
-void f (numbered s) { std::cout << s.mysn << std::endl; }
+void f (const numbered &s) { std::cout << s.mysn << std::endl; }
 
 int main()
 {
