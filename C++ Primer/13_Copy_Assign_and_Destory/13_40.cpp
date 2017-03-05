@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <memory>
 #include <utility>
@@ -9,7 +10,7 @@ class StrVec {
 				StrVec &operator=(const StrVec&);
 				~StrVec();
 
-				StrVec(std::initializer_list<std::string>);
+				StrVec(const std::initializer_list<std::string>);
 				void push_back(const std::string&);
 				size_t size() const { return cap - elements; }
 				size_t capacity() const { return cap - elements; }
@@ -25,6 +26,8 @@ class StrVec {
 				std::string *first_free;
 				std::string *cap;
 };
+
+std::allocator<std::string> StrVec::alloc;
 
 void StrVec::push_back(const std::string& s)
 {
@@ -48,6 +51,20 @@ void StrVec::free()
 		}
 }
 
+void StrVec::reallocate()
+{
+		auto newcapacity = size() ? 2 * size() : 1;
+		auto newdata = alloc.allocate(newcapacity);
+		auto dest = newdata;
+		auto elem = elements;
+		for (size_t i = 0; i != size(); ++i)
+				alloc.construct(dest++, std::move(*elem++));
+		free();
+		elements = newdata;
+		first_free = dest;
+		cap = elements + newcapacity;
+}
+
 StrVec::StrVec(const StrVec &s)
 {
 		auto newdata = alloc_n_copy(s.begin(), s.end());
@@ -69,7 +86,22 @@ StrVec &StrVec::operator=(const StrVec &rhs)
 		return *this;
 }
 
-StrVec::StrVec(std::initializer_list<std::string> str_lst)
+StrVec::StrVec(const std::initializer_list<std::string> str_lst)
 {
-		alloc.allocate(str_lst.size());
-		
+		std::cout << "Calling initializer_list constructor" << std::endl;
+		auto iniptr = alloc.allocate(str_lst.size());
+		auto last = std::uninitialized_copy(str_lst.begin(), str_lst.end(), iniptr);
+		elements = iniptr;
+		first_free = cap = last;
+}
+
+
+int main()
+{
+		StrVec ivec{"123", "456", "sdasd"};
+		for (const auto &str : ivec)
+				std::cout << str << " ";
+		std::cout << std::endl;
+		return 0;
+}
+

@@ -1,6 +1,8 @@
+#include <iostream>
 #include <string>
 #include <memory>
 #include <utility>
+#include <algorithm>
 
 class StrVec {
 		public:
@@ -8,6 +10,8 @@ class StrVec {
 				StrVec(const StrVec&);
 				StrVec &operator=(const StrVec&);
 				~StrVec();
+
+				StrVec(const std::initializer_list<std::string>);
 				void push_back(const std::string&);
 				size_t size() const { return cap - elements; }
 				size_t capacity() const { return cap - elements; }
@@ -24,6 +28,8 @@ class StrVec {
 				std::string *cap;
 };
 
+std::allocator<std::string> StrVec::alloc;
+
 void StrVec::push_back(const std::string& s)
 {
 		chk_n_alloc();
@@ -38,12 +44,28 @@ std::pair<std::string*, std::string*> StrVec::alloc_n_copy(const std::string *b,
 
 void StrVec::free()
 {
+		/*
+		 * perfer the rpvious one, easier to understand
+		 */
 		if (elements)
 		{
-				for (auto p = first_free; p != elements; )
-						alloc.destroy(--p);
+				std::for_each(begin(), end(), [&](std::string &str){ alloc.destroy(&str); });
 				alloc.deallocate(elements, cap - elements);
 		}
+}
+
+void StrVec::reallocate()
+{
+		auto newcapacity = size() ? 2 * size() : 1;
+		auto newdata = alloc.allocate(newcapacity);
+		auto dest = newdata;
+		auto elem = elements;
+		for (size_t i = 0; i != size(); ++i)
+				alloc.construct(dest++, std::move(*elem++));
+		free();
+		elements = newdata;
+		first_free = dest;
+		cap = elements + newcapacity;
 }
 
 StrVec::StrVec(const StrVec &s)
@@ -67,7 +89,22 @@ StrVec &StrVec::operator=(const StrVec &rhs)
 		return *this;
 }
 
+StrVec::StrVec(const std::initializer_list<std::string> str_lst)
+{
+		std::cout << "Calling initializer_list constructor" << std::endl;
+		auto iniptr = alloc.allocate(str_lst.size());
+		auto last = std::uninitialized_copy(str_lst.begin(), str_lst.end(), iniptr);
+		elements = iniptr;
+		first_free = cap = last;
+}
+
+
 int main()
 {
+		StrVec ivec{"123", "456", "sdasd"};
+		for (const auto &str : ivec)
+				std::cout << str << " ";
+		std::cout << std::endl;
 		return 0;
 }
+
