@@ -1,9 +1,14 @@
+/*
+ * just String class
+ */
 #include <iostream>
 #include <memory>
 #include <utility>
 
 class String {
 		public:
+				friend bool operator==(const String &, const String &);
+				friend std::ostream &operator<<(std::ostream &, const String &);
 				String(): element(nullptr) { }
 				String(const char *);
 				String(const String&);
@@ -22,6 +27,7 @@ std::allocator<char> String::alloc;
 
 String::String(const char *ptr)
 {
+		std::cout << "calling const char *ptr" << std::endl;
 		size_t len = 0;
 		const char *ini_ptr = ptr;
 		while (*ptr++)
@@ -32,6 +38,7 @@ String::String(const char *ptr)
 
 		while (*ini_ptr)
 				alloc.construct(begin++, *ini_ptr++);
+		std::cout << "After construct: " << *this << std::endl;
 }
 
 String::String(const String &rhs)
@@ -64,9 +71,37 @@ String::~String()
 		alloc.deallocate(element, length);
 }
 
+bool operator==(const String &lhs, const String &rhs)
+{
+		if (lhs.length != rhs.length)
+				return false;
+		for (std::size_t index = 0; index < lhs.length; ++index)
+		{
+				if (*(lhs.element + index) != *(rhs.element + index))
+						return false;
+		}
+		return true;
+}
+
+bool operator!=(const String &lhs, const String &rhs)
+{
+		return !(lhs==rhs);
+}
+
+std::ostream &operator<<(std::ostream &os, const String &str)
+{
+		for (auto c : str)
+				os << c;
+		return os;
+}
+
 int main()
 {
 		const char string[] = "abc";
 		String str(string), str2(str);
+		std::cout << str2 << std::endl;
+		std::cout << str << std::endl;
+		std::cout << (str == str2) << std::endl;
+		std::cout << (str != str2) << std::endl;
 		return 0;
 }
