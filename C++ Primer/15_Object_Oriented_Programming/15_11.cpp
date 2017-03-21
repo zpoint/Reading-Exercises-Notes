@@ -10,6 +10,10 @@ class Quote
 			std::string isbn() const { return bookNo; }
 			virtual double net_price(std::size_t n) const { return n * price; }
 			virtual ~Quote() = default;
+			virtual void debug()
+			{
+					std::cout << "Quote: bookNo: " << bookNo << " price: " << price << std::endl;
+			}
 		private:
 			std::string bookNo;
 		protected:
@@ -23,6 +27,11 @@ class Bulk_quote : public Quote
 			Bulk_quote(const std::string& book, double p,
 							std::size_t qty, double disc) : Quote(book, p), min_qty(qty), discount(disc) { }
 			double net_price(std::size_t) const override;
+			void debug() override
+			{
+					std::cout << "Bulk_quote:  price: " << price << " min_qty: " << min_qty << " discount: " << discount << std::endl;
+			}
+
 		private:
 			std::size_t min_qty = 0;
 			double discount = 0.0;
@@ -49,6 +58,10 @@ class Limit_quote : public Quote
 					else
 							return n * price * discount;
 			}
+			void debug() override
+			{
+					std::cout << "Limit_quote price: " << price << " limit: " << limit << " discount: " << discount << std::endl;
+			}
 		private:
 			std::size_t limit = 0;
 			double discount = 0.0;
@@ -64,6 +77,10 @@ double print_total(std::ostream &os, const Quote &item, std::size_t n)
 int main()
 {
 		Limit_quote lq("Limit_quote", 20, 3, 0.5);
-		std::cout << lq.net_price(5) << std::endl;
+		Quote q("Quote", 5);
+		Quote *ptr_q = &q;
+		ptr_q->debug();
+		ptr_q = &lq;
+		ptr_q->debug();
 		return 0;
 }
