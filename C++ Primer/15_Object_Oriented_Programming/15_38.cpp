@@ -86,6 +86,8 @@ inline Query operator|(const Query &lhs, const Query &rhs)
 
 int main()
 {
-		Query q = Query("fiery") & Query("bird") | Query("wind");
+		// BinaryQuery a = Query("fiery") & Query("bird"); // illegal, BinaryQuery is an abstract class
+		// AndQuery b = Query("fiery") & Query("bird"); // no viable conversion from 'Query' to 'AndQuery'
+		// OrQuery c = Query("fiery") & Query("bird"); // same
 		return 0;
 }
