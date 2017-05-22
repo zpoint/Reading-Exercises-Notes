@@ -3,6 +3,7 @@
 std::istream &read(std::istream &is, struct Sales_data &item);
 
 struct Sales_data {
+		friend struct std::hash<Sales_data>;
 		std::string bookNo;
 		unsigned units_sold = 0;
 		double revenue = 0.0;
@@ -14,6 +15,7 @@ struct Sales_data {
 				read(is, *this);
 		}
 		Sales_data &operator+=(const Sales_data&);
+		bool operator==(const Sales_data&) const;
 };
 
 std::istream &read(std::istream &is, struct Sales_data &item)
@@ -67,4 +69,7 @@ Sales_data& Sales_data::operator+=(const Sales_data &item)
 		return *this;
 }
 
-
+bool Sales_data::operator==(const Sales_data &item) const
+{
+		return item.bookNo == bookNo;
+}
