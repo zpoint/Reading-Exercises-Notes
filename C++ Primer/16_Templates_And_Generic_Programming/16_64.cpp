@@ -22,8 +22,8 @@ size_t occurence_count(std::vector<const char *> &tvec, const char* val)
 		for (auto char_ptr : tvec)
 		{
 				tmp_ptr = const_cast<char *>(val);
-				while (char_ptr != nullptr and val != nullptr and *char_ptr++ == *val++);
-				if (char_ptr == tmp_ptr)
+				while (*char_ptr != '\0' and *tmp_ptr != '\0' and *char_ptr++ == *tmp_ptr++);
+				if (*char_ptr == *tmp_ptr)
 						count += 1;
 		}
 		return count;
