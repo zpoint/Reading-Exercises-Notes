@@ -1,6 +1,6 @@
 # translator for nonterminals
 
-	cd translator/translator_for_nonterminals/
+	cd compilers/translator/translator_for_nonterminals/
 	g++ -std=c++11 translator_for_nonterminals.cpp
 
     ./a.out
