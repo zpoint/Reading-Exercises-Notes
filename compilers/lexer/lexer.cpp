@@ -2,6 +2,21 @@
 #include <string>
 #include <map>
 
+inline int char2int(char c)
+{
+		return c - (static_cast<int>('0') - 0);
+}
+
+inline bool isletter(char c)
+{
+		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+inline bool isdigit(char c)
+{
+		return c >= '0' and c <= '9';
+}
+
 struct Token 
 {
 		Token(int t): tag(t) { }
@@ -46,21 +61,32 @@ Lexer::Lexer()
 
 Token Lexer::scan()
 {
-		int tmp;
-		for ( ; ; std::cin.get(tmp))
+		for ( ; ; std::cin.get(peek))
 		{
-				peek = static_cast<char>(tmp);
-				if (peek = ' ' || peek == '\t') continue;
+				if (peek == ' ' || peek == '\t') continue;
 				else if (peek == '\n') line += 1;
 				else break;
 		}
-		if isdigit(peek)
+		if (isdigit(peek))
 		{
 				int v = 0;
 				do
 				{
-						v = 
+						v = 10 * v + char2int(peek);
+						std::cin.get(peek);
 				}
+				while (isdigit(peek));
+				return Num(v);
+		}
+		if (isdigit(peek))
+		{
+				std::string str;
+				do
+				{
+						str += peek;
+						std::cin.get(peek);
+				}
+				while (isdigit(peek) || isletter(peek));
 		}
 }
 
