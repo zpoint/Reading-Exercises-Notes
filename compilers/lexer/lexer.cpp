@@ -19,14 +19,16 @@ inline bool isdigit(char c)
 
 struct Token 
 {
+		Token() { throw std::runtime_error("Call default constructor of Token"); }
 		Token(int t): tag(t) { }
-		const int tag;
+		const int tag = 0;
 };
 
 struct Tag
 {
 		static const int NUM = 256, ID = 257, TRUE = 258, FALSE = 259;
 };
+
 
 struct Num : Token
 {
@@ -38,6 +40,15 @@ struct Word : Token
 {
 		const std::string lexeme;
 		Word(int t, std::string s): Token(t), lexeme(s) { }
+		Word() { throw std::runtime_error("Call default constructor of Word"); }
+		Word& operator=(const Word &rhs)
+		{
+				if (tag != rhs.tag)
+						throw std::runtime_error("Copy assignment operator, token mismatch");
+				if (lexeme != rhs.lexeme)
+						throw std::runtime_error("Copy assignment operator, lexeme mismatch");
+				return *this;
+		}
 };
 
 struct Lexer
@@ -55,9 +66,9 @@ struct Lexer
 
 Lexer::Lexer()
 {
-		reserve(Word(Tag.TRUE, "true"));
-		reserve(Word(Tag.FALSE, "false"));
-}
+		reserve(Word(Tag::TRUE, "true"));
+		reserve(Word(Tag::FALSE, "false"));
+};
 
 Token Lexer::scan()
 {
@@ -78,7 +89,7 @@ Token Lexer::scan()
 				while (isdigit(peek));
 				return Num(v);
 		}
-		if (isdigit(peek))
+		if (isletter(peek))
 		{
 				std::string str;
 				do
@@ -87,7 +98,23 @@ Token Lexer::scan()
 						std::cin.get(peek);
 				}
 				while (isdigit(peek) || isletter(peek));
+				std::map<std::string, Word>::iterator iter = words.find(str);
+				if (iter != words.end())
+				{
+						return (*iter).second;
+				}
+				
+				else
+				{
+						Word new_word(Tag::ID, str);
+						words[str] = new_word;
+						return new_word;
+				}
+				
 		}
+		Token t(peek);
+		peek = ' ';
+		return t;
 }
 
 int main()
