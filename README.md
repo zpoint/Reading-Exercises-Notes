@@ -6,6 +6,7 @@
 5. [**<< Core Python Programming 2nd >>**](https://github.com/zpoint/Reading-Exercises-Notes/tree/master/core_python_programming)
 6. [**<< High Peformance Python >>**](https://github.com/zpoint/Reading-Exercises-Notes/tree/master/high_peformance_python)
 7. [**<< Compilers >>**](https://github.com/zpoint/Reading-Exercises-Notes/tree/master/compilers)
+8. [**<< Programming Pearls >>**](https://github.com/zpoint/Reading-Exercises-Notes/tree/master/Programming_Pearls)
 
 #### Others
 1.  [**A tower defense game in action scripts (homw work)**](https://github.com/zpoint/Reading-Exercises-Notes/tree/master/tower_defense)

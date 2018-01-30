@@ -5,6 +5,7 @@ from sklearn.datasets import fetch_mldata
 from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.base import clone, BaseEstimator
+from sklearn.metrics import confusion_matrix
 
 mnist = fetch_mldata("MNIST original")
 X, y = mnist["data"], mnist["target"]
@@ -74,5 +75,11 @@ def never5classifier():
     print(r)
 
 
+def confusion_mtx():
+    y_train_5 = (y_train == 5)
+    print(y_train_5)
+    # confusion_matrix(y_train_5, y_train)
+
+
 if __name__ == "__main__":
-    never5classifier()
+    confusion_mtx()
