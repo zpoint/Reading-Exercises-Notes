@@ -35,8 +35,9 @@ class Dictionary
 							temp_word[index] = word[index];
 					// quicksort
 					qsort(temp_word, 0, word_size - 1);
-					return std::string(temp_word);
-					
+					std::string ret_str = std::string(temp_word);
+					free(temp_word);
+					return ret_str;
 			}
 
 			// quicksort
