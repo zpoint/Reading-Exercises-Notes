@@ -9,15 +9,16 @@ void HandleTCPClient(int clntSocket)
 		char buffer[BUFSIZ]; // Buffer for echo string
 
 		// Receive message from client
-		ssize_t numBytesRcvd = recv(clntSocket, buffer, BUFSIZ, 0);
+		ssize_t numBytesRcvd = recv(clntSocket, buffer, BUFSIZ-1, 0);
 		if (numBytesRcvd < 0)
 				DieWithSystemMessage("recv() failed");
-
+		buffer[numBytesRcvd] = '\0';
 		// Send received string and receive again until end of stream
 		while (numBytesRcvd > 0)
 		{
 				// 0 indicates end of stream
 				// Echo message back to client
+				// printf("numBytesRcvd: %ld, buffer: %s\n", numBytesRcvd, buffer);
 				ssize_t numBytesSent = send(clntSocket, buffer, numBytesRcvd, 0);
 				if (numBytesSent < 0)
 						DieWithSystemMessage("send() failed");
@@ -25,9 +26,11 @@ void HandleTCPClient(int clntSocket)
 						DieWithUserMessage("send()", "sent unexpected number of bytes");
 
 				// See if there is more data to receive
+				// printf("numBytesSent: %ld\n", numBytesSent);
 				numBytesRcvd = recv(clntSocket, buffer, BUFSIZ, 0);
 				if (numBytesRcvd < 0)
 						DieWithSystemMessage("recv() failed");
+				buffer[numBytesRcvd] = '\0';
 		}
 
 		close(clntSocket); // close client socket
