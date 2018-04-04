@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <stdlib.h>
+#include "AddressUtility.c"
 
 void DieWithUserMessage(const char *msg, const char *detail)
 {
@@ -16,3 +17,6 @@ void DieWithSystemMessage(const char *msg)
 		perror(msg);
 		exit(1);
 }
+
+#include "TCPClientUtility.c"
+#include "TCPServerUtility.c"
