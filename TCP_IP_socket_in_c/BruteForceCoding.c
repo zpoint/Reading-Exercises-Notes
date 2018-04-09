@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
-#include "./Practical.h"
+#include "./TCP/Practical.h"
 
 const uint8_t val8 = 101; // One hundred and one
 const uint16_t val16 = 10001; // Ten thousand and one
@@ -57,5 +57,17 @@ int main(int argc, char *argv[])
 		offset = EncodeIntBigEndian(message, val64, offset, sizeof(uint64_t));
 		printf("Encoded message:\n%s\n", BytesToDecString(message, MESSAGELENGTH));
 
-		uint64_t value = DecodeIntBigEndian(message);
+		uint64_t value = DecodeIntBigEndian(message, sizeof(uint8_t), sizeof(uint16_t));
+		printf("Decoded 2-byte integer = %u\n", (unsigned int)value);
+		value = DecodeIntBigEndian(message, sizeof(uint8_t) + sizeof(uint16_t) + sizeof(uint32_t), sizeof(uint64_t));
+		printf("Decoded 8-byte integer = %llu\n", value);
+		
+		// Show signedness
+		offset = 4;
+		int iSize = sizeof(int32_t);
+		value = DecodeIntBigEndian(message, offset, iSize);
+		printf("Decoded value (offset %d, size %d) = %lld\n", offset, iSize, value);
+		int signedVal = DecodeIntBigEndian(message, offset, iSize);
+		printf("...same as signed value %d\n", signedVal);
+		return 0;
 }
