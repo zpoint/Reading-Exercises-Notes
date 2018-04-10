@@ -1,3 +1,4 @@
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -49,7 +50,7 @@ int GetNextMsg(FILE *in, uint8_t *buf, size_t buffSize)
  * Return number of bytes written, or -1 on failure.
  */
 
-int PutMsg(uint8_t buf[], size_t msgSize, file *out)
+int PutMsg(uint8_t buf[], size_t msgSize, FILE *out)
 {
 		// Check for delimiter in message
 		int i;

@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 				// Create an input stream from the socket
 				FILE *channel = fdopen(clntSock, "r+");
 				if (channel == NULL)
-						DieWithUserMessage("fdopen() failed");
+						DieWithSystemMessage("fdopen() failed");
 
 				// Receive messages until connection closes
 				int mSize;
