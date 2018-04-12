@@ -6,7 +6,7 @@
 
 static const int MAXPENDING = 5; // Maximum outstanding connection requests
 
-void HandleTCPClient(int clntSocket)
+void HandleTCPClientCommon(int clntSocket)
 {
 		char buffer[BUFSIZ]; // Buffer for echo string
 
@@ -34,8 +34,21 @@ void HandleTCPClient(int clntSocket)
 						DieWithSystemMessage("recv() failed");
 				buffer[numBytesRcvd] = '\0';
 		}
+}
 
+void HandleTCPClient(int clntSocket)
+{
+		HandleTCPClientCommon(clntSocket);
 		close(clntSocket); // close client socket
+}
+
+void HandleTCPClientSleep(int clntSocket, unsigned secondsToSleep)
+{
+		printf("clntSocket num: %d, Going to sleep for %d seconds\n", clntSocket, secondsToSleep);
+		sleep(secondsToSleep);
+		HandleTCPClientCommon(clntSocket);
+		printf("clntSocket num: %d, sleep done, going to close\n", clntSocket);
+		close(clntSocket);
 }
 
 int SetupTCPServerSocket(const char *service)
