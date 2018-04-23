@@ -39,4 +39,27 @@ string recvString(CommunicatingSocket *sock) throw(runtime_error)
 		return result;
 }
 
-bool readSurvery();
+bool readSurvery(istream &stream, std::vector<Question> &qList)
+{
+		int count = 0;
+		stream >> count; // See how many questions there are
+		stream.ignore(); // Skip past newline
+		qList = vector<Question>(count);
+
+		// Parse each question.
+		for (unsigned int q = 0; q < qList.size(); q++)
+		{
+				getline(stream, qList[q].qText); // Get the text of the question
+
+				count = 0;
+				stream >> count; // Read number of responses
+				stream.ignore(); // Skip past newline
+
+				// Initialize the response list and populate it.
+				qList[q].rList = vector<string>(count);
+				for (unsigned int r = 0; r < qList[q].rList.size(); r++)
+						getline(stream, qList[q].rList[r]);
+		}
+
+		return stream; // Retuen true if stream is still good
+}
