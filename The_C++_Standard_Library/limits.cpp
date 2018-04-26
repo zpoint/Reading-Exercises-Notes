@@ -1,6 +1,8 @@
 #include <iostream>
 #include <limits>
 #include <string>
+#include <utility>
+
 using namespace std;
 
 int main()
@@ -26,5 +28,7 @@ int main()
 
 		// print whether numeric limits for type string exist
 		std::cout << "is_specialized(string): " << std::numeric_limits<std::string>::is_specialized << std::endl;
+
+		decltype(std::declval<int>()) i = 0;
 		return 0;	
 }
