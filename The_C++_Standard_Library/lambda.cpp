@@ -9,5 +9,16 @@ int main()
 		int y = 12;
 		auto pos = std::find_if(coll.cbegin(), coll.cend(), [=](int i){return i > x && i < y;});
 		std::cout << "first elem >5 and <12: " << *pos << std::endl;
+
+		int id = 0;
+		auto f = [id] () mutable {
+				std::cout << "id: " << id << std::endl;
+				++id;
+		};
+		id = 42;
+		f();
+		f();
+		f();
+		std::cout << "id out: " << id << std::endl;
 		return 0;
 }
