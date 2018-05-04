@@ -1,4 +1,5 @@
 #include <iostream>
+#include <forward_list>
 
 namespace t1 
 {
@@ -14,5 +15,8 @@ int main()
 {
 		using namespace t1;
 		aa();
+		std::forward_list<int> fw1 = {1,2,3,4};
+		std::forward_list<int>::iterator iter = fw1.begin();
+		++iter;
 		return 0;
 }
