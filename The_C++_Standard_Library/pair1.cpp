@@ -7,7 +7,7 @@ using namespace std;
 class Foo
 {
 		public:
-			Foo(tuple<int, float>) { std::cout << "Foo::Foo(ruple)" << std::endl;}
+			Foo(tuple<int, float>) { std::cout << "Foo::Foo(tuple)" << std::endl;}
 			template <typename... Args> Foo(Args... args) { std::cout << "Foo:Foo(args...)" << std::endl;}
 };
 
