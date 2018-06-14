@@ -1,4 +1,6 @@
 #include "../lib/unp.h"
+#include "NonBlockingIO/strclinonb.c"
+#include "NonBlockingIO/strclifork.c"
 
 struct args 
 {
@@ -81,6 +83,7 @@ int main(int argc, char **argv)
 		Inet_pton(AF_INET, argv[1], &servaddr.sin_addr);
 
 		Connect(sockfd, (SA *) &servaddr, sizeof(servaddr));
-		my_str_cli(stdin, sockfd);
+		// str_cli_nonblock(stdin, sockfd);
+		str_cli_fork(stdin, sockfd);
 		exit(0);
 }
