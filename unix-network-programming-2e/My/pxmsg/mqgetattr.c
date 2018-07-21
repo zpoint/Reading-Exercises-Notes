@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 		mqd = Mq_open(argv[1], O_RDONLY);
 
 		Mq_getattr(mqd, &attr);
-		printf("max #msgs = %ld, max # bytes/msg = %ld, #current on queue = %ld\n", attr.mq_maxmsg, attr.mq_msgsize, attr.mq_currmsgs);
+		printf("max #msgs = %ld, max # bytes/msg = %ld, #current on queue = %ld\n", attr.mq_maxmsg, attr.mq_msgsize, attr.mq_curmsgs);
 
 		Mq_close(mqd);
 		exit(0);
