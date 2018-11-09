@@ -5,7 +5,6 @@
 #include <boost/array.hpp>
 #include <array>
 #include <utility>
-#include <iterator>
 #include <algorithm>
 #include <iostream>
 
@@ -13,7 +12,7 @@ int main()
 {
 		enum { topLeft, topRight, bottomRight, bottomLeft };
 
-		std::array<std::pair<int, int>, 4> edges{{
+		std::array<std::pair<int, int>, 4> edges {{
 				std::make_pair(topLeft, topRight),
 				std::make_pair(topRight, bottomRight),
 				std::make_pair(bottomRight, bottomLeft),
@@ -24,12 +23,23 @@ int main()
 		graph g{edges.begin(), edges.end(), 4};
 
 		boost::array<int, 4> distances{{0}};
+		boost::array<int, 4> predecessors;
+		predecessors[bottomRight] = bottomRight;
 
-		boost::breadth_first_search(g, topLeft,
-			boost::visitor(boost::make_bfs_visitor(boost::record_distances(distances.begin(), boost::on_tree_edge{})))
+		boost::breadth_first_search(g, bottomRight,
+			boost::visitor(boost::make_bfs_visitor(std::make_pair(boost::record_distances(distances.begin(), boost::on_tree_edge()), 
+						   boost::record_predecessors(predecessors.begin(), boost::on_tree_edge{})))
+					)
 		);
 
-		std::copy(distances.begin(), distances.end(), std::ostream_iterator<int>{std::cout, "\n"});
-		return 0;
+		std::for_each(distances.begin(), distances.end(), [](int d){ std::cout << d << '\n'; });
 
+		int p = topLeft;
+		while (p != bottomRight)
+		{
+				std::cout << p << '\n';
+				p = predecessors[p];
+		}
+		std::cout << p << '\n';
+		return 0;
 }
