@@ -129,3 +129,4 @@ set nu
 set clipboard=unnamed
 set hlsearch
 set tabstop=4
+set backspace=indent,eol,start
