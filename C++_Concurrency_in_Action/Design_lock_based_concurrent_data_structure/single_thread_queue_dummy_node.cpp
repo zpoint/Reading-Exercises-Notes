@@ -7,23 +7,22 @@ class queue
 		private:
 			struct node
 			{
-					T data;
+					std::shared_ptr<T> data;
 					std::unique_ptr<node> next;
-					node (T data_): data(std::move(data_)) { }
 			};
 			std::unique_ptr<node> head;
-			node *tail = nullptr;
+			node *tail;
 		public:
-			queue() {}
+			queue(): head(new node), tail(head.get()) {}
 			queue(const queue& other) = delete;
 			queue& operator=(const queue& other) = delete;
 			std::shared_ptr<T> try_pop()
 			{
-					if (!head)
+					if (head.get() == tail)
 					{
 							return std::shared_ptr<T>();
 					}
-					std::shared_ptr<T> const res(std::make_shared<T>(std::move(head->data)));
+					std::shared_ptr<T> const res(head->data);
 					std::unique_ptr<node> const old_head = std::move(head);
 					head = std::move(old_head->next);
 					return res;
@@ -31,16 +30,11 @@ class queue
 
 			void push(T new_value)
 			{
-					std::unique_ptr<node> p(new node(std::move(new_value)));
-					node *const new_tail = p.get();
-					if (tail)
-					{
-							tail->next = std::move(p);
-					}
-					else
-					{
-							head = std::move(p);
-					}
+					std::shared_ptr<T> new_data(std::make_shared<T>(std::move(new_value)));
+					std::unique_ptr<node> p(new node);
+					tail->data = new_data;
+					node* const new_tail = p.get();
+					tail->next = std::move(p);
 					tail = new_tail;
 			}
 };
