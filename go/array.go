@@ -15,6 +15,7 @@ func equal() {
 	a := [2]int{1, 2}
 	b := [...]int{1, 2}
 	c := [2]int{1, 3}
+	// c = [2]int{5, 6}
 	fmt.Println(a == b, a == c, b == c) // "true false false"
 	d := [3]int{1, 2}
 	fmt.Printf("%T\n", d)

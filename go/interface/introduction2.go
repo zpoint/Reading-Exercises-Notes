@@ -16,7 +16,7 @@ func(*data)test() {
 	fmt.Printf("in test\n")
 }
 
-func(data)string()string{
+func(*data)string()string{
 	fmt.Printf("in string\n");
 	return""
 }
