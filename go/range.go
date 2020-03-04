@@ -8,4 +8,7 @@ func main() {
 	for index, value := range slice {
 		fmt.Printf("Value: %d Value-Addr: %X ElemAddr: %X\n", value, &value, &slice[index])
 	}
+	for index := range slice {
+		fmt.Println("index: ", index)
+	}
 }
