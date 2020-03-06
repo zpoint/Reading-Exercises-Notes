@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 )
 
 func main() {
@@ -32,4 +33,5 @@ func main() {
 			break
 		}
 	}
+	time.Sleep(time.Second*1)
 }
