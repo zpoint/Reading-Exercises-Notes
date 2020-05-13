@@ -1,0 +1,4 @@
+export CLASSPATH=".:/usr/local/Cellar/antlr/4.8_1/antlr-4.8-complete.jar:$CLASSPATH"
+antlr hello.g4
+javac *.java
+grun hello tokens -tokens hello.play
