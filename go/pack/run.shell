@@ -1,0 +1,5 @@
+go run hello.go main.go
+
+or
+
+go build ./
