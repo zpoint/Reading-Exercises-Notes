@@ -1,0 +1,4 @@
+antlr PlayScript.g4
+cd ..
+javac antlrtest/*.java
+grun antlrtest.PlayScript expression -gui
