@@ -1,0 +1,5 @@
+addictive: multiplication | multiplication Plus addictive
+multiplication : IntLiteral | IntLiteral Star multiplication
+IntLiteral: [0-9]*
+Star: '*'
+Plus: '+'
