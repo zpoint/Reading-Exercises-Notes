@@ -1,0 +1,10 @@
+statement: intDeclaration | expressionStatement | assignmentStatement;
+
+intDeclaration : 'int' Id ( = additive) ';'
+expressionStatement : addtive ';'
+addtive : multiplicative ( (+ | -) multiplicative)*
+
+
+multiplicative : primary ( (* | /) primary)*
+primary : IntLiteral | Id | (additive)
+IntLiteral: [0-9]*
