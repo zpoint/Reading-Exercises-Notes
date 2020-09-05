@@ -48,5 +48,5 @@ func binaryTreePaths(root *TreeNode) []string {
 }
 
 func main() {
-	binaryTreePaths()
+	binaryTreePaths(&TreeNode{})
 }
