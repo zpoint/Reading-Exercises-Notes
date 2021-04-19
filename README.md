@@ -11,4 +11,4 @@
 
 #### Others
 1.  [**A tower defense game in action scripts (homw work)**](https://github.com/zpoint/Reading-Exercises-Notes/tree/master/tower_defense)
-2. [**vim configure file**](https://github.com/zpoint/Reading-Exercises-Notes/tree/master/vim_conf)
+2. [**vim configure file**](https://github.com/zpoint/Reading-Exercises-Notes/blob/master/ubuntu_conf/vim_conf/vimrc)
